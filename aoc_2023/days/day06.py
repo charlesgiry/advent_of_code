@@ -129,8 +129,6 @@ def d6p2_brute():
             min_winning = i
             max_winning = big_race['time'] - min_winning
             result = max_winning - min_winning + 1  # +1 as i's first value is 0
-            if big_race['time'] % 2 != 0:
-                result += 1
 
             return result
 
