@@ -21,16 +21,19 @@ card_values = {
     'A': 14
 }
 
+
 def hand_value(hand):
     """
-
+    return the card hand in a list format using the int card value
+    :return list[int]: return a "A2345" hand in format [14, 2, 3, 4, 5]
     """
     return [card_values[card] for card in hand]
 
 
 def hand_type(hand):
     """
-
+    get the correct hand type from a hand (ex: AAAAA is a five_kinds, AAA22 a full house etc)
+    :return str: the hand type
     """
     # count each card type in hand
     card_count = {card: 0 for card in card_values.keys()}
@@ -97,20 +100,21 @@ def hand_type(hand):
 
 def parse_hand(line):
     """
-
+    return a line from the input into a parsed dict with the correct hand_type (pair, three of a kind etc)
+    :return dict: the parsed line
     """
     split_line = line.split()
     hand = split_line[0]
     bid_value = int(split_line[1])
 
-    card = {
+    parsed_hand = {
         'hand': hand,
         'bid': bid_value,
         'hand_value': hand_value(hand),
         'hand_type': hand_type(hand)
     }
 
-    return card
+    return parsed_hand
 
 
 hands = {
@@ -122,6 +126,7 @@ hands = {
     'four_kinds': [],
     'five_kinds': []
 }
+# Make another copy of the hands list to parse it correctly for part 2
 hands_p2 = deepcopy(hands)
 
 # parse file
@@ -137,7 +142,8 @@ with open('data/day07_data.txt', 'r') as file:
 
 def total_winnings(hands):
     """
-
+    from a hands dict (either hands or hands_p2) return the sum of (bid * rank) for every hand
+    :return int: the expected result
     """
     result = 0
     rank = 1
