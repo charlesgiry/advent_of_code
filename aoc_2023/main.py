@@ -7,6 +7,7 @@ from days.day04 import d4p1, d4p2
 from days.day05 import d5p1, d5p2
 from days.day06 import d6p1, d6p2
 from days.day07 import d7p1, d7p2
+from days.day08 import d8p1, d8p2
 
 
 def measure(func):
@@ -44,4 +45,9 @@ if __name__ == '__main__':
 
     measure(d7p1)
     measure(d7p2)
+    print('')
+
+
+    measure(d8p1)
+    measure(d8p2)
     print('')
