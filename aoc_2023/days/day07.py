@@ -1,5 +1,5 @@
 """
-aoc 2023 day 77
+aoc 2023 day 7
 https://adventofcode.com/2023/day/7
 """
 from copy import deepcopy
