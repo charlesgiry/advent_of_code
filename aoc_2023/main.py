@@ -8,17 +8,27 @@ from days.day05 import d5p1, d5p2
 from days.day06 import d6p1, d6p2
 from days.day07 import d7p1, d7p2
 from days.day08 import d8p1, d8p2
+from days.day09 import d9p1, d9p2
 
 
 def measure(func):
+    """
+    measure the performances of a method execution using time.perf_counter
+    """
     start = perf_counter()
     result = func()
     perf = perf_counter() - start
     perf = "{:.4f}".format(perf)
-    print(f'{func.__name__}: {result} - took {perf}s')
+    if result:
+        print(f'{func.__name__}: {result} - took {perf}s')
+    else:
+        print(f'{func.__name__} - took {perf}s')
 
 
-if __name__ == '__main__':
+def main():
+    """
+    main
+    """
     measure(d1p1)
     measure(d1p2)
     print('')
@@ -47,7 +57,14 @@ if __name__ == '__main__':
     measure(d7p2)
     print('')
 
-
     measure(d8p1)
     measure(d8p2)
     print('')
+
+    measure(d9p1)
+    measure(d9p2)
+    print('')
+
+
+if __name__ == '__main__':
+    measure(main)
