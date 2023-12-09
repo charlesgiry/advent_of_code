@@ -1,5 +1,6 @@
 """
-
+aoc 2023 day 9
+https://adventofcode.com/2023/day/9
 """
 with open('data/day09_data.txt', 'r') as file:
     lines = []
@@ -16,7 +17,9 @@ def extrapolate_value(starting_list, backward):
     """
     # build a stack of list until the list is full of zeroes
     stack = []
-    current_list = starting_list
+    # if we have to extrapolate backwards, we can simply invert the input and keep the method as is
+    current_list = starting_list[::-1] if backward else starting_list
+
     while True:
         stack.append(current_list)
         new_list = []
@@ -30,17 +33,10 @@ def extrapolate_value(starting_list, backward):
 
     # extrapolate the value to find based on previous list and whether it's a backward extrapolation or not
     calculation_value = 0
-    if backward:
-        while(stack):
-            current_list = stack.pop()
-            first_elem = current_list[0]
-            calculation_value = first_elem - calculation_value
-
-    else:
-        while stack:
-            current_list = stack.pop()
-            last_elem = current_list[-1]
-            calculation_value = last_elem + calculation_value
+    while stack:
+        current_list = stack.pop()
+        last_elem = current_list[-1]
+        calculation_value = last_elem + calculation_value
 
     return calculation_value
 
