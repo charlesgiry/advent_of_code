@@ -2,34 +2,6 @@
 aoc 2023 day 10
 https://adventofcode.com/2023/day/10
 """
-# import matplotlib.pyplot as plt
-#
-# def draw_polygon(points, single_point=None):
-#     # Extract y and x coordinates from the list of points
-#     y_coordinates, x_coordinates = zip(*points)
-#
-#     # Close the polygon by connecting the last point to the first point
-#     y_coordinates += (y_coordinates[0],)
-#     x_coordinates += (x_coordinates[0],)
-#
-#     # Plot the polygon
-#     plt.plot(x_coordinates, y_coordinates, marker='o', linestyle='-', label='Polygon')
-#     plt.fill(x_coordinates, y_coordinates, alpha=0.3)  # Fill the polygon
-#
-#     # Plot a single point if provided
-#     if single_point:
-#         y_single, x_single = single_point
-#         plt.plot(x_single, y_single, marker='o', color='red', label='Single Point')
-#
-#     # Set labels and display the legend
-#     plt.xlabel('x')
-#     plt.ylabel('y')
-#     plt.title('Polygon with Single Point')
-#     plt.grid(True)
-#     plt.legend()
-#     plt.show()
-
-
 pipe_connections = {
     '|': {
         (-1, 0): ['|', '7', 'F'],
@@ -421,4 +393,3 @@ def d10p2():
                         result += 1
 
     return result
-

@@ -48,7 +48,7 @@ with open('data/day11_data.txt', 'r') as file:
 
 def get_result(galaxy_growth):
     """
-    calculate the expected result by taking into account
+    calculate the expected result by taking into account galaxy growth
 
     """
     result = 0
