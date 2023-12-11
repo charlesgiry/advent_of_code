@@ -67,7 +67,7 @@ def main():
     print('')
 
     measure(d10p1)
-    # measure(d10p2)    # takes about 10 secs so skipping it unless i really want to calculate it
+    measure(d10p2)
     print('')
 
     measure(d11p1)

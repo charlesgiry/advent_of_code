@@ -2,6 +2,8 @@
 aoc 2023 day 10
 https://adventofcode.com/2023/day/10
 """
+from re import compile
+
 pipe_connections = {
     '|': {
         (-1, 0): ['|', '7', 'F'],
@@ -131,7 +133,7 @@ def walk_pipes(start: tuple[int, int]):
         form.append(current)
         neighbours = valid_neighbours(current) - walked_paths
 
-    return form
+    return form, walked_paths
 
 
 def ray_casting_is_inside(point, form):
@@ -160,6 +162,7 @@ def ray_casting_is_inside(point, form):
     return counter % 2 == 1
 
 
+# find the starting position
 start = (0, 0)
 for y in range(max_y):
     for x in range(max_x):
@@ -171,8 +174,8 @@ start_type = find_start_type(start)
 y, x = start
 lines[y] = lines[y][:x] + start_type + lines[y][x + 1:]
 
-# find the expected result
-pipes = walk_pipes(start)
+# find the pipe loop
+pipes, pipe_set = walk_pipes(start)
 
 def d10p1():
     """
@@ -370,26 +373,22 @@ def d10p2():
     In this last example, 10 tiles are enclosed by the loop.
     Figure out whether you have time to search for the nest by calculating the area within the loop. How many tiles are enclosed by the loop?
     """
-    result = 0
-    smallest_x = pipes[0][0]
-    biggest_x = pipes[0][0]
-    smallest_y = pipes[0][1]
-    biggest_y = pipes[0][1]
-
-    for pipe in pipes:
-        y, x = pipe
-        smallest_y = smallest_y if smallest_y < y else y
-        biggest_y = biggest_y if biggest_y > y else y
-        smallest_x = smallest_x if smallest_x < x else x
-        biggest_x = biggest_x if biggest_x > x else x
-
-    pipe_set = set(pipes)
-
+    # replace all the characters that are not part of the loop with .
+    # then we can count all the pipes left on a line
     for y in range(max_y):
         for x in range(max_x):
-            if smallest_x < x < biggest_x and smallest_y < y < biggest_y:
-                if (y, x) not in pipe_set:
-                    if ray_casting_is_inside((y, x), pipes):
-                        result += 1
+            if (y, x) not in pipe_set:
+                lines[y] = lines[y][:x] + '.' + lines[y][x+1:]
+
+    # count all intersections with the edges of the pipe loop
+    # if the number is uneven, then the character is inside the loop
+    result = 0
+    regexp = compile(r'\||J|L')
+    for y in range(max_y):
+        for x in range(max_x):
+            if (y, x) not in pipe_set:
+                found_inter = regexp.findall(lines[y][x:])
+                if len(found_inter) % 2 == 1:
+                    result += 1
 
     return result
