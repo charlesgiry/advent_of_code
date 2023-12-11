@@ -383,11 +383,22 @@ def d10p2():
     # count all intersections with the edges of the pipe loop
     # if the number is uneven, then the character is inside the loop
     result = 0
-    regexp = compile(r'\||J|L')
+
+    # If casting a ray on the right of the character, count |, J and Ls
+    # regexp = compile(r'\||J|L')
+    # for y in range(max_y):
+    #     for x in range(max_x):
+    #         if (y, x) not in pipe_set:
+    #             found_inter = regexp.findall(lines[y][x:])
+    #             if len(found_inter) % 2 == 1:
+    #                 result += 1
+
+    # If casting a ray on the left of the character, count |, F or 7s
+    regexp = compile('\||F|7')
     for y in range(max_y):
         for x in range(max_x):
             if (y, x) not in pipe_set:
-                found_inter = regexp.findall(lines[y][x:])
+                found_inter = regexp.findall(lines[y][:x])
                 if len(found_inter) % 2 == 1:
                     result += 1
 
