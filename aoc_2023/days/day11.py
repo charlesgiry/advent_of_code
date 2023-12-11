@@ -40,11 +40,6 @@ with open('data/day11_data.txt', 'r') as file:
             if galaxy != galaxy_2:
                 galaxy_pairs.add(frozenset([galaxy, galaxy_2]))
 
-    list_pairs = []
-    for pair in galaxy_pairs:
-        list_pairs.append(list(pair))
-    galaxy_pairs = list_pairs
-
 
 def get_result(galaxy_growth):
     """
@@ -53,7 +48,9 @@ def get_result(galaxy_growth):
     """
     result = 0
     for pair in galaxy_pairs:
-        galaxy1, galaxy2 = pair[0], pair[1]
+        p = iter(pair)
+        galaxy1 = next(p)
+        galaxy2 = next(p)
 
         y1, x1 = galaxy1
         y2, x2 = galaxy2
