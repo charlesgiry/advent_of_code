@@ -2,6 +2,7 @@
 aoc 2023 day 11
 https://adventofcode.com/2023/day/11
 """
+from itertools import combinations
 
 with open('data/day11_data.txt', 'r') as file:
     # read the file
@@ -34,11 +35,7 @@ with open('data/day11_data.txt', 'r') as file:
             if lines[y][x] == '#':
                 galaxies.add((y, x))
 
-    galaxy_pairs = set()
-    for galaxy in galaxies:
-        for galaxy_2 in galaxies:
-            if galaxy != galaxy_2:
-                galaxy_pairs.add(frozenset([galaxy, galaxy_2]))
+    galaxy_pairs = set(combinations(galaxies, 2))
 
 
 def get_result(galaxy_growth):
@@ -54,19 +51,22 @@ def get_result(galaxy_growth):
 
         y1, x1 = galaxy1
         y2, x2 = galaxy2
-        xs = range(min(x1, x2), max(x1, x2))
-        ys = range(min(y1, y2), max(y1, y2))
 
-        distance = len(xs) + len(ys)
-        for new_line in add_lines:
-            if new_line in ys:
+        xmax = max(x1, x2)
+        ymax = max(y1, y2)
+        xmin = min(x1, x2)
+        ymin = min(y1, y2)
+
+        distance = xmax + ymax - xmin - ymin
+        for y in add_lines:
+            if ymin < y < ymax:
                 distance += galaxy_growth - 1
-
-        for new_row in add_rows:
-            if new_row in xs:
+        for x in add_rows:
+            if xmin < x < xmax:
                 distance += galaxy_growth - 1
 
         result += distance
+
     return result
 
 
