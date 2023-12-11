@@ -41,7 +41,6 @@ with open('data/day11_data.txt', 'r') as file:
 def get_result(galaxy_growth):
     """
     calculate the expected result by taking into account galaxy growth
-
     """
     result = 0
     for pair in galaxy_pairs:
@@ -160,8 +159,7 @@ def d11p1():
     In this example, after expanding the universe, the sum of the shortest path between all 36 pairs of galaxies is 374.
     Expand the universe, then find the length of the shortest path between every pair of galaxies. What is the sum of these lengths?
     """
-    result = get_result(2)
-    return result
+    return get_result(2)
 
 
 def d11p2():
@@ -171,5 +169,4 @@ def d11p2():
     (In the example above, if each empty row or column were merely 10 times larger, the sum of the shortest paths between every pair of galaxies would be 1030. If each empty row or column were merely 100 times larger, the sum of the shortest paths between every pair of galaxies would be 8410. However, your universe will need to expand far beyond these values.)
     Starting with the same initial image, expand the universe according to these new rules, then find the length of the shortest path between every pair of galaxies. What is the sum of these lengths?
     """
-    result = get_result(1000000)
-    return result
+    return get_result(1000000)
