@@ -9,7 +9,8 @@ from days.day06 import d6p1, d6p2
 from days.day07 import d7p1, d7p2
 from days.day08 import d8p1, d8p2
 from days.day09 import d9p1, d9p2
-
+from days.day10 import d10p1, d10p2
+from days.day11 import d11p1, d11p2
 
 def measure(func):
     """
@@ -63,6 +64,14 @@ def main():
 
     measure(d9p1)
     measure(d9p2)
+    print('')
+
+    measure(d10p1)
+    # measure(d10p2)    # takes about 10 secs so skipping it unless i really want to calculate it
+    print('')
+
+    measure(d11p1)
+    measure(d11p2)
     print('')
 
 
