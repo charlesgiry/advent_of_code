@@ -12,6 +12,8 @@ from days.day09 import d9p1, d9p2
 from days.day10 import d10p1, d10p2
 from days.day11 import d11p1, d11p2
 from days.day12 import d12p1, d12p2
+from days.day13 import d13p1, d13p2
+
 
 def measure(func):
     """
@@ -77,6 +79,10 @@ def main():
 
     measure(d12p1)
     measure(d12p2)
+    print('')
+
+    measure(d13p1)
+    measure(d13p2)
     print('')
 
 
