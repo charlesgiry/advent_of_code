@@ -165,3 +165,54 @@ def d12p2():
         result += count_possibilities(springs, groups)
 
     return result
+
+
+def manual_memoized_count(springs, groups):
+    """
+    manual implementation of a memoize to test out
+    """
+    def valid_group(current, length):
+        """
+        Check whether the substring starting at current and ending at current + length
+        is a group composed by #s and ?s
+        """
+        return '.' not in springs[current:current + length] \
+            and current + length <= len(springs) \
+            and (current + length == len(springs) or springs[current + length] in ['.', '?'])
+
+    MEMO = {}
+    def manual_memoized(current, current_group):
+        """
+
+        """
+        if (current, current_group) in MEMO:
+            return MEMO[(current, current_group)]
+        else:
+            if current_group == len(groups):
+                res = int('#' not in springs[current:])
+                MEMO[(current, current_group)] = res
+                return res
+
+            if current >= len(springs):
+                MEMO[(current, current_group)] = 0
+                return 0
+
+            spring = springs[current]
+            group = groups[current_group]
+            if spring == '#':
+                if valid_group(current, group):
+                    res = manual_memoized(current + group + 1, current_group + 1)
+                    MEMO[(current, current_group)] = res
+                    return res
+                else:
+                    MEMO[(current, current_group)] = 0
+                    return 0
+
+            elif spring == '?':
+                if valid_group(current, group):
+                    res = manual_memoized(current + group + 1, current_group + 1) + manual_memoized(current + 1, current_group)
+                    MEMO[(current, current_group)] = res
+                    return res
+
+            return manual_memoized(current+1, current_group)
+    return manual_memoized(0, 0)
