@@ -5,82 +5,43 @@ https://adventofcode.com/2023/day/14
 from copy import copy
 
 with open('data/day14_data.txt', 'r') as file:
-    # lines = file.read().splitlines()
-    lines = [list(line) for line in file.read().splitlines()]
+    lines = file.read().splitlines()
 
 
-def move_stone_right(array):
+def move_stone_y_axis(array: list[str], up: bool):
     """
-    currently unused, trying to refactor the move stone method to make it more performant
+    Move all the stones either up or down
     """
     len_y = len(array)
     len_x = len(array[0])
 
-    signs = [[] for _ in range(len_y)]
+    steps = [[] for _ in range(len_x)]
+    for x in range(len_x):
+        step = {'O': 0, '.': 0, '#': 0}
+        for y in range(len_y):
+            if array[y][x] != '#':
+                step[array[y][x]] += 1
+            else:
+                step['#'] = 1
+                steps[x].append(step)
+                step = {'O': 0, '.': 0, '#': 0}
 
-    for y in range(len_y):
-        for x in range(len_x):
-            if array[y][x] == 'O':
-                signs[y].append(('O', x))
-            if array[y][x] == '#':
-                signs[y].append(('#', x))
+        if step['O'] != 0 or step['.'] != 0:
+            steps[x].append(step)
 
-    new_array = [
-        '' for i in range(len_y)
-    ]
-
-    for i in range(len_y):
-        o_count = 0
-        previous_sharp = 0
-        for type, x in signs[i]:
-            if type == 'O':
-                o_count += 1
-
-            if type == '#':
-                dot_count = x - previous_sharp - o_count
-                new_array[i] = new_array[i] + '.' * dot_count + 'O' * o_count + '#'
-                o_count = 0
-                previous_sharp = x + 1
-
-
-        rest = len_x - len(new_array[i])
-        dot_count = rest - o_count
-        new_array[i] = new_array[i] + '.' * dot_count + 'O' * o_count
+    new_array = ['' for _ in range(len_y)]
+    for x in range(len_x):
+        # get the characters to write
+        write = ''
+        for step in steps[x]:
+            if up:
+                write += 'O' * step['O'] + '.' * step['.'] + '#' * step['#']
+            else:
+                write += '.' * step['.'] + 'O' * step['O'] + '#' * step['#']
+        for y in range(len_y):
+            new_array[y] += write[y]
 
     return new_array
-
-
-# previous badly optimized function to move the stones
-def move_stone(array, y, x, mov_y, mov_x):
-    """
-    move all the "O" stones within the array in the mov_y or mov_x direction
-    """
-    while True:
-        new_y = y + mov_y
-        new_x = x + mov_x
-
-        if new_y < 0 \
-                or new_y >= len(array) \
-                or new_x < 0 \
-                or new_x >= len(array[0]) \
-                or array[new_y][new_x] == '#':
-            break
-
-        array[new_y][new_x], array[y][x] = array[y][x], array[new_y][new_x]
-        y, x = new_y, new_x
-
-        if array[y][x] != 'O':
-            break
-
-
-def tilt_up(array):
-    """
-    move all the stones to the north
-    """
-    for x in range(len(array[0])):
-        for y in range(len(array)):
-            if array[y][x] == 'O':
-                move_stone(array, y, x, -1, 0)
 
 
 def count_weight(array):
@@ -145,49 +106,65 @@ def d14p1():
     Tilt the platform so that the rounded rocks all roll north. Afterward, what is the total load on the north support beams?
     """
     l = copy(lines)
-    tilt_up(l)
+    l = move_stone_y_axis(l, up=True)
     return count_weight(l)
 
 
-def tilt_left(array):
+def move_stone_x_axis(array: list[str], right: bool):
     """
-    ove all the stones to the west
+    Move all the stones either left or right
+    """
+    len_y = len(array)
+    len_x = len(array[0])
 
-    """
-    for y in range(len(array)):
-        for x in range(len(array[0])):
+    signs = [[] for _ in range(len_y)]
+
+    for y in range(len_y):
+        for x in range(len_x):
             if array[y][x] == 'O':
-                move_stone(array, y, x, 0, -1)
+                signs[y].append(('O', x))
+            if array[y][x] == '#':
+                signs[y].append(('#', x))
+
+    new_array = [
+        '' for i in range(len_y)
+    ]
+
+    for i in range(len_y):
+        o_count = 0
+        previous_sharp = 0
+        for type, x in signs[i]:
+            if type == 'O':
+                o_count += 1
+
+            if type == '#':
+                dot_count = x - previous_sharp - o_count
+                if right:
+                    new_array[i] = new_array[i] + '.' * dot_count + 'O' * o_count + '#'
+                else:
+                    new_array[i] = new_array[i] + 'O' * o_count + '.' * dot_count + '#'
+
+                o_count = 0
+                previous_sharp = x + 1
+
+        rest = len_x - len(new_array[i])
+        dot_count = rest - o_count
+        if right:
+            new_array[i] = new_array[i] + '.' * dot_count + 'O' * o_count
+        else:
+            new_array[i] = new_array[i] + 'O' * o_count + '.' * dot_count
+    return new_array
 
 
-def tilt_down(array):
-    """
-    move all the stones to the south
-    """
-    for x in range(len(array[0])):
-        for y in range(len(array) - 1, -1, -1):
-            if array[y][x] == 'O':
-                move_stone(array, y, x, 1, 0)
-
-
-def tilt_right(array):
-    """
-    move all the stones to the east
-    """
-    for y in range(len(array)):
-        for x in range(len(array[0]) - 1, -1, -1):
-            if array[y][x] == 'O':
-                move_stone(array, y, x, 0, 1)
-
-
-def run_cycle(array):
+def run_cycle(array: list[str]) -> list[str]:
     """
     run all the required functions for a single sc=cycle
     """
-    tilt_up(array)
-    tilt_left(array)
-    tilt_down(array)
-    tilt_right(array)
+    l = move_stone_y_axis(array, up=True)
+    l = move_stone_x_axis(l, right=False)
+    l = move_stone_y_axis(l, up=False)
+    l = move_stone_x_axis(l, right=True)
+    return l
 
 
 def d14p2():
@@ -241,7 +218,7 @@ def d14p2():
     result_encountered = {}
 
     for i in range(1000000000):
-        run_cycle(l)
+        l = run_cycle(l)
         res = count_weight(l)
 
         # stock the latest result in the results list
@@ -253,10 +230,10 @@ def d14p2():
         else:
             result_encountered[res] = [i]
 
-        # if we encountered a result enough times, we'll just try to see if there's a cycle between the two
-        # results[i-1] would need to be equal to results[i - cycle - 1] etc...
-        if len(result_encountered[res]) > 3:  # 3's an arbitrary number that assumes that we'll have reached the cycling results
-            cycle_len = i - result_encountered[res][-2] # to fing the eventual cycle len, just calculate the diff between result_encountered[res][-1] and result_encountered[res][-2]
+        if len(result_encountered[res]) > 3:
+            cycle_len = i - result_encountered[res][-2]
+            if cycle_len == 1:
+                cycle_len = i - result_encountered[res][-3]
 
             # check that the pattern fully repeats
             res_found = True
@@ -266,6 +243,8 @@ def d14p2():
                     break
 
             if res_found:
-                cycle = results[-cycle_len:]    # get the last "cycle_len" results
-                n = 1000000000 % cycle_len      # because cycle repeats from now on, calculate which of the results within the cycle to return
+                cycle = results[-cycle_len:]
+                n = (1000000000 - i - 2) % cycle_len
                 return cycle[n]
+
+    return count_weight(l)
