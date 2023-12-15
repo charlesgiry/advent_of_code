@@ -105,8 +105,7 @@ def d14p1():
     The total load is the sum of the load caused by all of the rounded rocks. In this example, the total load is 136.
     Tilt the platform so that the rounded rocks all roll north. Afterward, what is the total load on the north support beams?
     """
-    l = copy(lines)
-    l = move_stone_y_axis(l, up=True)
+    l = move_stone_y_axis(lines, up=True)
     return count_weight(l)
 
 
@@ -213,7 +212,7 @@ def d14p2():
     In the above example, after 1000000000 cycles, the total load on the north support beams is 64.
     Run the spin cycle for 1000000000 cycles. Afterward, what is the total load on the north support beams?
     """
-    l = copy(lines)
+    l = lines
     results = []
     result_encountered = {}
 
@@ -230,6 +229,8 @@ def d14p2():
         else:
             result_encountered[res] = [i]
 
+        # 3 is an arbitrary number at which you'd want to see the pattern start appearing
+        # if result is incorrect, you probably need to increase this number
         if len(result_encountered[res]) > 3:
             cycle_len = i - result_encountered[res][-2]
             if cycle_len == 1:
