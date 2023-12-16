@@ -20,6 +20,7 @@ def holiday_ascii_string_helper(step: str) -> int:
         current = current % 256
     return current
 
+
 def d15p1() -> int:
     """
     The newly-focused parabolic reflector dish is sending all of the collected light to a point on the side of yet another mountain - the largest mountain on Lava Island. As you approach the mountain, you find that the light is being collected by the wall of a large facility embedded in the mountainside.
@@ -86,7 +87,7 @@ def d15p1() -> int:
     return result
 
 
-def holiday_ascii_string_helper_arrangement_procedure(boxes: list[dict], step: str):
+def holiday_ascii_string_helper_arrangement_procedure(boxes: dict, step: str):
     """
     Modify the box list according to the current step
     """
@@ -100,10 +101,15 @@ def holiday_ascii_string_helper_arrangement_procedure(boxes: list[dict], step: s
             boxes[box].pop(label)
         except KeyError:
             pass
-
+        else:
+            if boxes[box] == {}:
+                boxes.pop(box)
     else:
         focal_length = int(split_step[1])
-        boxes[box][label] = focal_length
+        try:
+            boxes[box][label] = focal_length
+        except KeyError:
+            boxes[box] = {label: focal_length}
 
 
 def d15p2():
@@ -189,18 +195,18 @@ def d15p2():
     So, the above example ends up with a total focusing power of 145.
     With the help of an over-enthusiastic reindeer in a hard hat, follow the initialization sequence. What is the focusing power of the resulting lens configuration?
     """
-    boxes = [{} for _ in range(256)]
+    boxes = {}
     for step in steps:
         holiday_ascii_string_helper_arrangement_procedure(boxes, step)
 
     result = 0
-    box_number = 0
-    for box in boxes:
-        box_number += 1
+    for box, lenses in boxes.items():
+        box_number = box + 1
         lens_number = 0
-        for lens in box:
+        focusing_power = 0
+        for lens in lenses.values():
             lens_number += 1
-            focusing_power = box_number * lens_number * box[lens]
-            result += focusing_power
+            focusing_power += box_number * lens_number * lens
+        result += focusing_power
 
     return result
