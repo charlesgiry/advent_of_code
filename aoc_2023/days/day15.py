@@ -89,7 +89,7 @@ def d15p1() -> int:
 
 def holiday_ascii_string_helper_arrangement_procedure(boxes: dict, step: str):
     """
-    Modify the box list according to the current step
+    Modify the box in boxes according to the current step
     """
     action = '=' if '=' in step else '-'
     split_step = step.split(action)

@@ -98,9 +98,13 @@ def main():
     # measure(d15p1)
     # measure(d15p2)
     # print('')
+    #
+    # measure(d16p1)
+    # measure(d16p2)      # takes about 3s
+    # print('')
 
-    measure(d16p1)
-    measure(d16p2)
+    measure(d17p1)
+    measure(d17p2)
     print('')
 
 
