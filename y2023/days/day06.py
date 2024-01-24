@@ -5,11 +5,13 @@ https://adventofcode.com/2023/day/6
 from functools import reduce
 from math import sqrt, ceil
 
-# parse the file
-with open('data/day06_data.txt', 'r') as file:
-    lines = file.read().splitlines()
-    times = lines[0].split(':')[1].split()
-    distances = lines[1].split(':')[1].split()
+
+def d6parse(data: list[str]):
+    """
+
+    """
+    times = data[0].split(':')[1].split()
+    distances = data[1].split(':')[1].split()
 
     # get all the races for p1
     races = []
@@ -26,8 +28,13 @@ with open('data/day06_data.txt', 'r') as file:
         'distance': int(''.join(d for d in distances))
     }
 
+    return {
+        'races': races,
+        'big_race': big_race
+    }
 
-def d6p1():
+
+def d6p1(data):
     """
     The ferry quickly brings you across Island Island. After asking around, you discover that there is indeed normally a large pile of sand somewhere near here, but you don't see anything besides lots of water and the small island where the ferry has docked.
     As you try to figure out what to do next, you notice a poster on a wall near the ferry dock. "Boat races! Open to the public! Grand prize is an all-expenses-paid trip to Desert Island!" That must be where the sand comes from! Best of all, the boat races are starting in just a few minutes.
@@ -66,6 +73,7 @@ def d6p1():
     Determine the number of ways you could beat the record in each race. What do you get if you multiply these numbers together?
     """
     results = []
+    races = data['races']
     for race in races:
         # print(f'race {race}')
         ways_to_win = 0
@@ -87,7 +95,7 @@ def d6p1():
     return result
 
 
-def d6p2():
+def d6p2(data):
     """
     As the race is about to start, you realize the piece of paper with race times and record distances you got earlier actually just has very bad kerning. There's really only one race - ignore the spaces between the numbers on each line.
     So, the example from before:
@@ -103,6 +111,8 @@ def d6p2():
     Now, you have to figure out how many ways there are to win this single race. In this example, the race lasts for 71530 milliseconds and the record distance you need to beat is 940200 millimeters. You could hold the button anywhere from 14 to 71516 milliseconds and beat the record, a total of 71503 ways!
     How many ways can you beat the record in this one much longer race?
     """
+    big_race = data['big_race']
+
     # solve with quadratic equations
     time = big_race['time']
     distance = big_race['distance']
@@ -116,10 +126,11 @@ def d6p2():
     return result
 
 
-def d6p2_brute():
+def d6p2_old(data):
     """
     first attempt as bruteforcing the solution is very fast for this day
     """
+    big_race = data['big_race']
     for i in range(big_race['time']):
         speed = i
         movement_time = big_race['time'] - i

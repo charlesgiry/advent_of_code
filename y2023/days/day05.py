@@ -4,7 +4,7 @@ https://adventofcode.com/2023/day/5
 """
 
 
-def parse_file():
+def d5parse(data: list[str]):
     current = ''
     seeds = []
     almanac = {
@@ -16,32 +16,32 @@ def parse_file():
         'temperature-to-humidity map': [],
         'humidity-to-location map': []
     }
-    with open('data/day05_data.txt', 'r') as file:
-        for line in file.read().splitlines(keepends=False):
-            split_line = line.split(':')
-            if len(split_line) == 2:
-                current = split_line[0]
+    for line in data:
+        split_line = line.split(':')
+        if len(split_line) == 2:
+            current = split_line[0]
 
-                if current == 'seeds':
-                    data = split_line[1]
-                    seeds = [int(i) for i in data.split()]
+            if current == 'seeds':
+                data = split_line[1]
+                seeds = [int(i) for i in data.split()]
 
-            if line != '' and line[0].isdigit():
-                data = line.split()
-                line_repr = {
-                    'min': int(data[1]),
-                    'max': int(data[1]) + int(data[2]) - 1,
-                    'target_min': int(data[0]),
-                    'target_max': int(data[0]) + int(data[2]) - 1,
-                    'func': int(data[0]) - int(data[1])
-                }
-                almanac[current].append(line_repr)
-    return seeds, almanac
+        if line != '' and line[0].isdigit():
+            data = line.split()
+            line_repr = {
+                'min': int(data[1]),
+                'max': int(data[1]) + int(data[2]) - 1,
+                'target_min': int(data[0]),
+                'target_max': int(data[0]) + int(data[2]) - 1,
+                'func': int(data[0]) - int(data[1])
+            }
+            almanac[current].append(line_repr)
 
-seeds, almanac = parse_file()
+    return {
+        'seeds': seeds,
+        'almanac': almanac
+    }
 
-
-def d5p1():
+def d5p1(data):
     """
     You take the boat and find the gardener right where you were told he would be: managing a giant "garden" that looks more to you like a farm.
     "A water source? Island Island is the water source!" You point out that Snow Island isn't receiving any water.
@@ -130,6 +130,8 @@ def d5p1():
     So, the lowest location number in this example is 35.
     What is the lowest location number that corresponds to any of the initial seed numbers?
     """
+    seeds = data['seeds']
+    almanac = data['almanac']
     min_value = max(seeds)
     for seed in seeds:
         current_value = seed
@@ -145,7 +147,7 @@ def d5p1():
     return min_value
 
 
-def d5p2():
+def d5p2(data):
     """
     Everyone will starve if you only plant such a small number of seeds. Re-reading the almanac, it looks like the seeds: line actually describes ranges of seed numbers.
     The values on the initial seeds: line come in pairs. Within each pair, the first value is the start of the range and the second value is the length of the range. So, in the first line of the example above:
@@ -159,6 +161,8 @@ def d5p2():
 
     Damn, spent 6,hours debugging a stupid typo
     """
+    seeds = data['seeds']
+    almanac = data['almanac']
     seed_ranges = []
     results = []
     for i in range(0, len(seeds), 2):
@@ -270,73 +274,3 @@ def d5p2():
 
     # print(f'result: {min}')
     return min
-
-
-# old, bad, defunct, proof of one's despair over a very stupid typo in my initial d5p2 implementation
-def revert_almanac():
-    """
-    revert the almanac to be able to parse it in revert
-    :return:
-    """
-    reverted_keys = []
-    reverted_almanac = {}
-    for key, values in almanac.items():
-        reverted_keys.append((key, values))
-
-    while reverted_keys:
-        curr = reverted_keys.pop(-1)
-        key = curr[0]
-        values = curr[1]
-        reverted_almanac[key] = values
-
-    mem_seeds = []
-    max_seed = 0
-    for i in range(0, len(seeds), 2):
-        seed = (seeds[i], seeds[i] + seeds[i + 1])
-        mem_seeds.append(seed)
-        max_seed = max_seed if max_seed > seed[1] else seed[1]
-
-    return mem_seeds, max_seed, reverted_almanac
-
-
-mem_seeds, max_seed, reverted_almanac = revert_almanac()
-
-
-def revert_result(i):
-    """
-    get a startung seed (if it exists) from a result
-    :param i: starting result
-    :return int: the result if it found a starting point
-    """
-    current = i
-    for key, steps in reverted_almanac.items():
-        for step in steps:
-            if step['target_min'] <= current <= step['target_max']:
-                current -= step['func']
-                break
-
-    for seed in mem_seeds:
-        if seed[0] <= current <= seed[1]:
-            return i
-
-    return
-
-
-def d5p2_old():
-    """
-    don't run this
-    :return:
-    """
-    print('starting d5p2 revert brute force, is very long')
-    result = None
-    i = 0
-    # find the first result coming from a seed
-    while i < max_seed:
-        if i % 1000000 == 0:
-            print(i)
-        result = revert_result(i)
-
-        if result is not None:
-            return result
-
-        i += 1
