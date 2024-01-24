@@ -1,5 +1,5 @@
 """
-aoc 2023 day 5
+aoc y2023 day 5
 https://adventofcode.com/2023/day/5
 """
 
@@ -45,7 +45,7 @@ def d5p1():
     """
     You take the boat and find the gardener right where you were told he would be: managing a giant "garden" that looks more to you like a farm.
     "A water source? Island Island is the water source!" You point out that Snow Island isn't receiving any water.
-    "Oh, we had to stop the water because we ran out of sand to filter it with! Can't make snow with dirty water. Don't worry, I'm sure we'll get more sand soon; we only turned off the water a few 2023... weeks... oh no." His face sinks into a look of horrified realization.
+    "Oh, we had to stop the water because we ran out of sand to filter it with! Can't make snow with dirty water. Don't worry, I'm sure we'll get more sand soon; we only turned off the water a few y2023... weeks... oh no." His face sinks into a look of horrified realization.
     "I've been so busy making sure everyone here has food that I completely forgot to check why we stopped getting more sand! There's a ferry leaving soon that is headed over in that direction - it's much faster than your boat. Could you please go check it out?"
     You barely have time to agree to this request when he brings up another. "While you wait for the ferry, maybe you can help us with our food production problem. The latest Island Island Almanac just arrived and we're having trouble making sense of it."
     The almanac (your puzzle input) lists all of the seeds that need to be planted. It also lists what type of soil to use with each kind of seed, what type of fertilizer to use with each kind of soil, what type of water to use with each kind of fertilizer, and so on. Every type of seed, soil, fertilizer and so on is identified with a number, but numbers are reused by each category - that is, soil 123 and fertilizer 123 aren't necessarily related to each other.

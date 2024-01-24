@@ -1,5 +1,5 @@
 """
-aoc 2023 day 11
+aoc y2023 day 11
 https://adventofcode.com/2023/day/11
 """
 from itertools import combinations

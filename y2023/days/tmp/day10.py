@@ -1,5 +1,5 @@
 """
-aoc 2023 day 10
+aoc y2023 day 10
 https://adventofcode.com/2023/day/10
 """
 from re import compile

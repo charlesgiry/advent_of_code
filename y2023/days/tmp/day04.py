@@ -1,5 +1,5 @@
 """
-aoc 2023 day 4
+aoc y2023 day 4
 https://adventofcode.com/2023/day/4
 """
 

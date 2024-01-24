@@ -1,15 +1,11 @@
 """
-aoc 2023 day 1
+aoc y2023 day 1
 https://adventofcode.com/2023/day/1
 """
 from re import compile
 
-# read file only once
-with open('data/day01_data.txt', 'r') as file:
-    lines = file.readlines()
 
-
-def d1p1():
+def d1p1(data: list[str]):
     """
     Something is wrong with global snow production, and you've been selected to take a look. The Elves have even given you a map; on it, they've used stars to mark the top fifty locations that are likely to be having problems.
     You've been doing this long enough to know that to restore snow operations, you need to check all fifty stars by December 25th.
@@ -31,7 +27,7 @@ def d1p1():
     # use a regexp to find all the digits
     result = 0
     regexp1 = compile(r'\d')
-    for line in lines:
+    for line in data:
         number_in_line = regexp1.findall(line)
 
         line_number = number_in_line[0] + number_in_line[-1]
@@ -39,7 +35,7 @@ def d1p1():
     return result
 
 
-def d1p2():
+def d1p2(data):
     """
     Your calculation isn't quite right. It looks like some of the digits are actually spelled out with letters: one, two, three, four, five, six, seven, eight, and nine also count as valid "digits".
     Equipped with this new information, you now need to find the real first and last digit on each line. For example:
@@ -59,7 +55,7 @@ def d1p2():
     # make sure regexp has positive lookahead for twone => [2, 1] cases
     result = 0
     regexp2 = compile(r'(?=(\d|one|two|three|four|five|six|seven|eight|nine))')
-    for line in lines:
+    for line in data:
         number_in_line = regexp2.findall(line)
 
         # transform digits in str format into digit format

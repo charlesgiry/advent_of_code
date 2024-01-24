@@ -1,5 +1,5 @@
 """
-aoc 2023 day 12
+aoc y2023 day 12
 https://adventofcode.com/2023/day/12
 """
 from copy import copy

@@ -1,5 +1,5 @@
 """
-aoc 2023 day 2
+aoc y2023 day 2
 https://adventofcode.com/2023/day/2
 """
 from re import compile
@@ -8,6 +8,14 @@ from re import compile
 blue_regexp = compile(r'\d+ blue')
 green_regexp = compile(r'\d+ green')
 red_regexp = compile(r'\d+ red')
+
+
+def d2parse(data):
+    lines = []
+    for line in data:
+        id, blue, green, red = parse_game(line)
+        lines.append([id, blue, green, red])
+    return lines
 
 
 def parse_game(line):
@@ -30,15 +38,8 @@ def parse_game(line):
 
     return id, blue, green, red
 
-# read file only once
-games = []
-with open('data/day02_data.txt', 'r') as file:
-    for line in file.readlines():
-        id, blue, green, red = parse_game(line)
-        games.append([id, blue, green, red])
 
-
-def d2p1():
+def d2p1(data):
     """
     You're launched high into the atmosphere! The apex of your trajectory just barely reaches the surface of a large island floating in the sky. You gently land in a fluffy pile of leaves. It's quite cold, but you don't see much snow. An Elf runs over to greet you.
     The Elf explains that you've arrived at Snow Island and apologizes for the lack of snow. He'll be happy to explain the situation, but it's a bit of a walk, so you have some time. They don't get many visitors up here; would you like to play a game in the meantime?
@@ -63,7 +64,7 @@ def d2p1():
     max_red = 12
     max_green = 13
     max_blue = 14
-    for game in games:
+    for game in data:
         id, blue, green, red = game
         try:
             if max(blue) > max_blue:
@@ -80,7 +81,7 @@ def d2p1():
     return result
 
 
-def d2p2():
+def d2p2(data):
     """
     The Elf says they've stopped producing snow because they aren't getting any water! He isn't sure why the water stopped; however, he can show you how to get to the water source to check it out for yourself. It's just up ahead!
     As you continue your walk, the Elf poses a second question: in each game you played, what is the fewest number of cubes of each color that could have been in the bag to make the game possible?
@@ -102,7 +103,7 @@ def d2p2():
     For each game, find the minimum set of cubes that must have been present. What is the sum of the power of these sets?
     """
     result = 0
-    for game in games:
+    for game in data:
         _, blue, green, red = game
         max_red = max(blue)
         max_green = max(green)

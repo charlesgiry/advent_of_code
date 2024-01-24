@@ -1,5 +1,5 @@
 """
-aoc 2023 day 18
+aoc y2023 day 18
 https://adventofcode.com/2023/day/18
 """
 import re

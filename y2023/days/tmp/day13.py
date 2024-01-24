@@ -1,5 +1,5 @@
 """
-aoc 2023 day 13
+aoc y2023 day 13
 https://adventofcode.com/2023/day/13
 """
 with open('data/day13_data.txt', 'r') as file:

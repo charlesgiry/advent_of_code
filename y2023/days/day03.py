@@ -1,16 +1,18 @@
 """
-aoc 2023 day 3
+aoc y2023 day 3
 https://adventofcode.com/2023/day/3
 """
 
-numbers = []
-symbols = []
-with open('data/day03_data.txt', 'r') as file:
+
+def d3parse(data):
+    numbers = []
+    symbols = []
+
     y = 0
-    lines = file.readlines()
-    len_x = len(lines) - 1
-    len_y = len(lines[0]) - 1
-    for line in lines:
+    len_x = len(data) - 1
+    len_y = len(data[0]) - 1
+
+    for line in data:
         x = 0
         while x < len(line):
             if line[x].isdigit():
@@ -40,8 +42,15 @@ with open('data/day03_data.txt', 'r') as file:
             x += 1
         y += 1
 
+    return {
+        'numbers': numbers,
+        'symbols': symbols,
+        'len_x': len_x,
+        'len_y': len_y
+    }
 
-def d3p1():
+
+def d3p1(data):
     """
     You and the Elf eventually reach a gondola lift station; he says the gondola lift will take you up to the water source, but this is as far as he can bring you. You go inside.
     It doesn't take long to find the gondolas, but there seems to be a problem: they're not moving.
@@ -66,9 +75,12 @@ def d3p1():
     Of course, the actual engine schematic is much larger. What is the sum of all of the part numbers in the engine schematic?
     """
     result = 0
+    len_x = data['len_x']
+    len_y = data['len_y']
+
     # for each symbol, find all the related numbers
-    for symbol in symbols:
-        for number in numbers:
+    for symbol in data['symbols']:
+        for number in data['numbers']:
             min_x = number['min_x'] -1 if number['min_x'] -1 >= 0 else 0
             min_y = number['y'] - 1 if number['y'] -1 >= 0 else 0
             max_x = number['max_x'] + 1 if number['max_x'] + 1 <= len_x else len_x
@@ -84,7 +96,7 @@ def d3p1():
     return result
 
 
-def d3p2():
+def d3p2(data):
     """
     The engineer finds the missing part and installs it in the engine! As the engine springs to life, you jump in the closest gondola, finally ready to ascend to the water source.
     You don't seem to be going very fast, though. Maybe something is still wrong? Fortunately, the gondola has a phone labeled "help", so you pick it up and the engineer answers.
@@ -108,12 +120,14 @@ def d3p2():
     In this schematic, there are two gears. The first is in the top left; it has part numbers 467 and 35, so its gear ratio is 16345. The second gear is in the lower right; its gear ratio is 451490. (The * adjacent to 617 is not a gear because it is only adjacent to one part number.) Adding up all of the gear ratios produces 467835.
     """
     result = 0
+    len_x = data['len_x']
+    len_y = data['len_y']
     # for each "*" symbol, find all the related numbers
-    for symbol in symbols:
+    for symbol in data['symbols']:
         if symbol['symbol'] == '*':
             related_numbers = []
 
-            for number in numbers:
+            for number in data['numbers']:
                 min_x = number['min_x'] - 1 if number['min_x'] - 1 >= 0 else 0
                 min_y = number['y'] - 1 if number['y'] - 1 >= 0 else 0
                 max_x = number['max_x'] + 1 if number['max_x'] + 1 <= len_x else len_x

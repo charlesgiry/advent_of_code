@@ -1,5 +1,5 @@
 """
-aoc 2023 day 8
+aoc y2023 day 8
 https://adventofcode.com/2023/day/8
 """
 import functools

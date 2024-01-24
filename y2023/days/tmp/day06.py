@@ -1,5 +1,5 @@
 """
-aoc 2023 day 6
+aoc y2023 day 6
 https://adventofcode.com/2023/day/6
 """
 from functools import reduce
