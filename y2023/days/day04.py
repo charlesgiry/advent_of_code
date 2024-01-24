@@ -16,12 +16,8 @@ def parse_line(line):
 
     return winning_numbers, game_numbers
 
-lines = []
-with open('data/day04_data.txt', 'r') as file:
-    lines = file.readlines()
 
-
-def d4p1():
+def d4p1(data):
     """
     The gondola takes you up. Strangely, though, the ground doesn't seem to be coming with you; you're not climbing a mountain. As the circle of Snow Island recedes below you, an entire new landmass suddenly appears above you! The gondola carries you to the surface of the new island and lurches into the station.
     As you exit the gondola, the first thing you notice is that the air here is much warmer than it was on Snow Island. It's also quite humid. Is this where the water source is?
@@ -53,7 +49,7 @@ def d4p1():
     """
     result = 0
 
-    for line in lines:
+    for line in data:
         winning_numbers, game_numbers = parse_line(line)
         # since winning_numbers and game_numbers are sets
         # doing a AND will only leave the winning numbers that also were in game_numbers
@@ -65,7 +61,7 @@ def d4p1():
     return result
 
 
-def d4p2():
+def d4p2(data):
     """
     Just as you're about to report your findings to the Elf, one of you realizes that the rules have actually been printed on the back of every card this whole time.
     There's no such thing as "points". Instead, scratchcards only cause you to win more scratchcards equal to the number of winning numbers you have.
@@ -94,9 +90,9 @@ def d4p2():
     result = 0
 
     # generate a list containing all the cards at the start
-    results = [1 for i in lines]
+    results = [1 for i in data]
 
-    for i, line in enumerate(lines):
+    for i, line in enumerate(data):
         winning_numbers, game_numbers = parse_line(line)
         wins = winning_numbers & game_numbers
 
@@ -107,7 +103,7 @@ def d4p2():
         # (ex you win 10 times on last game, you can't do last game +1)
         for j in range(
                 i+1,
-                min(i + len(wins) + 1, len(lines))
+                min(i + len(wins) + 1, len(data))
         ):
             results[j] += current_multiplier
 
@@ -116,7 +112,7 @@ def d4p2():
     return result
 
 
-def d4p2_old():
+def d4p2_old(data):
     """
     slightly less efficient version
     keep a lookahead of how many times you have to execute the next cards
@@ -136,7 +132,7 @@ def d4p2_old():
     result = 0
     scratchcards = [0]
 
-    for line in lines:
+    for line in data:
         scratchcards = [0] if scratchcards == [] else scratchcards
         scratchcards[0] += 1
         winning_numbers, game_numbers = parse_line(line)

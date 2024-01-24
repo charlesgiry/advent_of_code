@@ -8,39 +8,6 @@ from pathlib import Path
 
 from utils import measure, fopen
 
-parser = ArgumentParser()
-
-now = datetime.utcnow()
-max_year = now.year + 1 if now.month == 12 else now.year
-parser.add_argument(
-    '-y', '--year',
-    help='Execute only a given year',
-    action='store',
-    nargs='*',
-    choices=range(2015, max_year),
-    type=int,
-    dest='year'
-)
-
-day_arg = parser.add_argument(
-    '-d', '--day',
-    help='Execute only a given day of a year. Depends on --year arg',
-    action='store',
-    nargs='*',
-    choices=range(1, 32),
-    type=int,
-    dest='day'
-)
-
-part_arg = parser.add_argument(
-    '-p', '--part',
-    help='Execute only a given part for a day. Depends on --day arg',
-    action='store',
-    nargs='*',
-    choices=[1, 2],
-    type=int,
-    dest='part'
-)
 
 def main(args: Namespace):
     """
@@ -63,13 +30,59 @@ def main(args: Namespace):
             for part in args.part:
                 func_name = f'd{day}p{part}'
                 func = getattr(module, func_name)
-                result = measure(func, data, show_args=False)
+                measure(func, data, show_args=False, show_result=True)
+
+                if args.old:
+                    if hasattr(module, f'{func_name}_old'):
+                        func_name = f'd{day}p{part}_old'
+                        func = getattr(module, func_name)
+                        measure(func, data, show_args=False, show_result=True)
 
             print('')
 
 
-
 if __name__ == '__main__':
+    parser = ArgumentParser()
+
+    now = datetime.utcnow()
+    max_year = now.year + 1 if now.month == 12 else now.year
+    parser.add_argument(
+        '-y', '--year',
+        help='Execute only a given year',
+        action='store',
+        nargs='*',
+        choices=range(2015, max_year),
+        type=int,
+        dest='year'
+    )
+
+    parser.add_argument(
+        '-d', '--day',
+        help='Execute only a given day of a year. Depends on --year arg',
+        action='store',
+        nargs='*',
+        choices=range(1, 32),
+        type=int,
+        dest='day'
+    )
+
+    parser.add_argument(
+        '-p', '--part',
+        help='Execute only a given part for a day. Depends on --day arg',
+        action='store',
+        nargs='*',
+        choices=[1, 2],
+        type=int,
+        dest='part'
+    )
+
+    parser.add_argument(
+        '-o', '--old',
+        help='Execute "old" methods as well',
+        action='store_true',
+        dest='old'
+    )
+
     args = parser.parse_args()
 
     if args.year is None:
