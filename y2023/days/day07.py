@@ -117,27 +117,33 @@ def parse_hand(line):
     return parsed_hand
 
 
-hands = {
-    'high_cards': [],
-    'pairs': [],
-    'two_pairs': [],
-    'three_kinds': [],
-    'full_houses': [],
-    'four_kinds': [],
-    'five_kinds': []
-}
-# Make another copy of the hands list to parse it correctly for part 2
-hands_p2 = deepcopy(hands)
+def d7parse(data):
+    """
 
-# parse file
-with open('data/day07_data.txt', 'r') as file:
-    for line in file.read().splitlines():
+    """
+    hands = {
+        'high_cards': [],
+        'pairs': [],
+        'two_pairs': [],
+        'three_kinds': [],
+        'full_houses': [],
+        'four_kinds': [],
+        'five_kinds': []
+    }
+    # Make another copy of the hands list to parse it correctly for part 2
+    hands_p2 = deepcopy(hands)
+    for line in data:
         hand = parse_hand(line)
         hands[hand['hand_type']].append(hand)
 
         # for part 2
         hand_p2 = parse_hand(line.replace('J', 'X'))
         hands_p2[hand_p2['hand_type']].append(hand_p2)
+
+    return {
+        'hands': hands,
+        'hands_p2': hands_p2
+    }
 
 
 def total_winnings(hands):
@@ -159,7 +165,7 @@ def total_winnings(hands):
 
     return result
 
-def d7p1():
+def d7p1(data):
     """
     Your all-expenses-paid trip turns out to be a one-way, five-minute ride in an airship. (At least it's a cool airship!) It drops you off at the edge of a vast desert and descends back to Island Island.
     "Did you bring the parts?"
@@ -202,10 +208,11 @@ def d7p1():
     Now, you can determine the total winnings of this set of hands by adding up the result of multiplying each hand's bid with its rank (765 * 1 + 220 * 2 + 28 * 3 + 684 * 4 + 483 * 5). So the total winnings in this example are 6440.
     Find the rank of every hand in your set. What are the total winnings?
     """
+    hands = data['hands']
     return total_winnings(hands)
 
 
-def d7p2():
+def d7p2(data):
     """
     To make things a little more interesting, the Elf introduces one additional rule. Now, J cards are jokers - wildcards that can act like whatever card would make the hand the strongest type possible.
     To balance this, J cards are now the weakest individual cards, weaker even than 2. The other cards stay in the same order: A, K, Q, T, 9, 8, 7, 6, 5, 4, 3, 2, J.
@@ -225,4 +232,5 @@ def d7p2():
     With the new joker rule, the total winnings in this example are 5905.
     Using the new joker rule, find the rank of every hand in your set. What are the new total winnings?
     """
+    hands_p2 = data['hands_p2']
     return total_winnings(hands_p2)

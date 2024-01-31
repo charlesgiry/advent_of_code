@@ -61,7 +61,7 @@ if __name__ == '__main__':
         help='Execute only a given day of a year. Depends on --year arg',
         action='store',
         nargs='*',
-        choices=range(1, 32),
+        choices=range(1, 26),
         type=int,
         dest='day'
     )
