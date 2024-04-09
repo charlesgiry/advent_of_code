@@ -19,7 +19,7 @@ def main(args: Namespace):
         module = import_module(f'{module_name}')
 
         for day in args.day:
-            day_data = str(day) if day > 10 else f'0{day}'
+            day_data = str(day) if day >= 10 else f'0{day}'
             data_file = Path(data_folder, f'day{day_data}.txt')
             data = measure(fopen, data_file, show_args=True, show_result=False)
 
