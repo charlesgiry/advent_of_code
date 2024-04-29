@@ -3,7 +3,6 @@
 """
 from time import perf_counter
 from traceback import print_exc
-from importlib import import_module
 
 
 def measure(func, *args, **kwargs):
@@ -41,7 +40,6 @@ def measure(func, *args, **kwargs):
             print_str = f'{print_str} - took {perf}s'
         print(print_str)
         return result
-
 
 
 def fopen(filepath):

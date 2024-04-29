@@ -160,7 +160,7 @@ def total_winnings(hands):
         for hand in sorted_values:
             hand_value = hand['bid'] * rank
             result += hand_value
-            #print(f'  rank: {rank}, result: {result}, hand: {hand}, hand value: {hand_value}')
+            # print(f'  rank: {rank}, result: {result}, hand: {hand}, hand value: {hand_value}')
             rank += 1
 
     return result

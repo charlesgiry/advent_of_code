@@ -41,6 +41,7 @@ def d5parse(data: list[str]):
         'almanac': almanac
     }
 
+
 def d5p1(data):
     """
     You take the boat and find the gardener right where you were told he would be: managing a giant "garden" that looks more to you like a farm.
@@ -265,7 +266,6 @@ def d5p2(data):
             current_range = next_range
 
         results += next_range
-
 
     min = max(seeds)
     for result in results:
