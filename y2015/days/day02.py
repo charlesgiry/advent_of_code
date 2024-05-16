@@ -31,7 +31,7 @@ def d2p1(data):
         wh = w * h
         hl = h * l
 
-        surface = 2 * lw + 2 * wh + 2 * hl
+        surface = 2 * (lw + wh + hl)
         surface += min([lw, wh, hl])
         result += surface
     return result

@@ -2,6 +2,7 @@
 aoc y2015 day 1
 https://adventofcode.com/2015/day/1
 """
+import re
 
 
 def d1parse(data):
@@ -10,6 +11,20 @@ def d1parse(data):
     return the first element of data as data
     """
     return data[0]
+
+
+def d1p1_old(data):
+    """
+    Old basic version of the code
+    """
+    result = 0
+    for c in data:
+        if c == '(':
+            result += 1
+        else:
+            result -= 1
+
+    return result
 
 
 def d1p1(data):
@@ -31,14 +46,9 @@ def d1p1(data):
     ))) and )())()) both result in floor -3.
     To what floor do the instructions take Santa?
     """
-    result = 0
-    for c in data:
-        if c == '(':
-            result += 1
-        else:
-            result -= 1
-
-    return result
+    pluses = len(re.findall(r'\(', data))
+    minuses = len(data) - pluses
+    return pluses - minuses
 
 
 def d1p2(data):
