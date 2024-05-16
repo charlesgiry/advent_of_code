@@ -90,7 +90,7 @@ if __name__ == '__main__':
         args.year = range(2015, max_year)
 
     if args.day is None:
-        args.day = range(1, 32)
+        args.day = range(1, 26)
 
     if args.part is None:
         args.part = [1, 2]
