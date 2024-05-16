@@ -48,6 +48,21 @@ def d8p1(data):
 
 def encode(str):
     """
+    return an "encoded" line with replaced characters
+    """
+    result = ''
+    for char in str:
+        if char == '"':
+            result += '\\"'
+        elif char == '\\':
+            result += '\\\\'
+        else:
+            result += char
+    return f'"{result}"'
+
+
+def d8p2(data):
+    """
     Now, let's go the other way. In addition to finding the number of characters of code,
     you should now encode each code representation as a new string and find the number of characters of the
     new encoded representation, including the surrounding double quotes.
@@ -63,21 +78,6 @@ def encode(str):
     For example, for the strings above, the total encoded length (6 + 9 + 16 + 11 = 42)
     minus the characters in the original code representation (23, just like in the first part of this puzzle)
     is 42 - 23 = 19.
-    """
-    result = ''
-    for char in str:
-        if char == '"':
-            result += '\\"'
-        elif char == '\\':
-            result += '\\\\'
-        else:
-            result += char
-    return f'"{result}"'
-
-
-def d8p2(data):
-    """
-
     """
     total_len = 0
     encoded_len = 0
