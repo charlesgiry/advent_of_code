@@ -11,3 +11,4 @@ from .day07 import d7parse, d7p1, d7p2
 from .day08 import d8p1, d8p2
 from .day09 import d9parse, d9p1, d9p2
 from .day10 import d10parse, d10p1, d10p2
+from .day11 import d11parse, d11p1, d11p2
