@@ -5,6 +5,8 @@ https://adventofcode.com/2015/day/7
 operations = {}
 results = {}
 
+# Check Topological sorting algorithm for this day
+
 
 def d7parse(data):
     for line in data:

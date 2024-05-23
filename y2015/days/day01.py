@@ -46,7 +46,7 @@ def d1p1(data):
     ))) and )())()) both result in floor -3.
     To what floor do the instructions take Santa?
     """
-    pluses = len(re.findall(r'\(', data))
+    pluses = data.count('(')
     minuses = len(data) - pluses
     return pluses - minuses
 

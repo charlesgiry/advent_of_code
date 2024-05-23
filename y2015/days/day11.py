@@ -1,5 +1,6 @@
 """
-
+aoc y2015 day 11
+https://adventofcode.com/2015/day/11
 """
 from string import ascii_lowercase
 
@@ -100,8 +101,10 @@ def d11p1(data):
 
 
 def d11p2(data):
+    """
+    Santa's password expired again. What's the next one?
+    """
     current = d11p1(data)
     current = password_to_list(current)
     current = increment_password(current)
     return d11p1(current)
-

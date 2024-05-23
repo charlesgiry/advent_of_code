@@ -2,6 +2,8 @@
 aoc y2015 day 10
 https://adventofcode.com/2015/day/10
 """
+
+
 def d10parse(data):
     return data[0]
 
