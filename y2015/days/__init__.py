@@ -15,3 +15,4 @@ from y2015.days.day11 import d11parse, d11p1, d11p2
 from y2015.days.day12 import d12parse, d12p1, d12p2
 from y2015.days.day13 import d13parse, d13p1, d13p2
 from y2015.days.day14 import d14parse, d14p1, d14p2
+from y2015.days.day15 import d15parse, d15p1, d15p2
