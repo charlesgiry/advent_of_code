@@ -1,5 +1,6 @@
 """
-
+aoc y2015 day 16
+https://adventofcode.com/2015/day/16
 """
 from re import compile
 
