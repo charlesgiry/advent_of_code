@@ -2,10 +2,10 @@
 aoc y2015 day 7
 https://adventofcode.com/2015/day/7
 """
-operations = {}
-results = {}
+from functools import cache
 
-# Check Topological sorting algorithm for this day
+# Operations as a global variable to be usable in cached explore function
+operations = {}
 
 
 def d7parse(data):
@@ -15,12 +15,10 @@ def d7parse(data):
     return operations
 
 
+@cache
 def explore(value):
     if value.isdigit():
         return int(value)
-
-    if value in results:
-        return results[value]
 
     operation = operations[value]
     if len(operation) == 1:
@@ -38,7 +36,6 @@ def explore(value):
         else:
             result = explore(operation[1]) ^ 0xffff
 
-    results[value] = result
     return result
 
 
@@ -49,5 +46,5 @@ def d7p1(data):
 def d7p2(data):
     result = explore('a')
     operations['b'] = [str(result)]
-    results.clear()
+    explore.cache_clear()
     return explore('a')
