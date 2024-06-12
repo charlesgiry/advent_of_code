@@ -21,3 +21,4 @@ from y2015.days.day17 import d17parse, d17p1, d17p2
 from y2015.days.day18 import d18parse, d18p1, d18p2, d18p1_old
 from y2015.days.day19 import d19parse, d19p1, d19p2
 from y2015.days.day20 import d20parse, d20p1, d20p2
+from y2015.days.day21 import d21parse, d21p1, d21p2
