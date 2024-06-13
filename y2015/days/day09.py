@@ -9,8 +9,6 @@ def d9parse(data):
     """
 
     """
-    towns = set()
-
     targets = {}
     distances = {}
     towns = set()
