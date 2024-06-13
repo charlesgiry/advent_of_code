@@ -2,79 +2,63 @@
 aoc y2023 day 19
 https://adventofcode.com/2023/day/19
 """
+from operator import lt, gt
 from copy import copy
-from pprint import pprint
-
-# seems I could have used https://docs.python.org/3/library/operator.html as well for next 2 methods
-def lower(value, compared_to):
-    """
-
-    """
-    return value < compared_to
 
 
-def bigger(value, compared_to):
-    """
+def d19parse(data):
+    workflows = {
+        'A': True,
+        'R': False
+    }
+    parts = []
 
-    """
-    return value > compared_to
+    is_parts = False
+    for line in data:
+        if line == '':
+            is_parts = True
+            continue
 
+        if not is_parts:
+            workflow = []
+            line_split = line.split('{')
+            key = line_split[0]
+            flow_split = line_split[1][:-1].split(',')
 
-workflows = {
-    'A': True,
-    'R': False
-}
-parts = []
-with open('data/day19_data.txt', 'r') as file:
-    lines = file.read().splitlines()
-
-is_parts = False
-for line in lines:
-    if line == '':
-        is_parts = True
-        continue
-
-    if not is_parts:
-        workflow = []
-        line_split = line.split('{')
-        key = line_split[0]
-        flow_split = line_split[1][:-1].split(',')
-
-        default = None
-        for flow in flow_split:
-            flow_desc = flow.split(':')
-            if len(flow_desc) == 1:
-                default = flow_desc[0]
-            else:
-                split_flow_desc = []
-                func = None
-                if '<' in flow_desc[0]:
-                    split_flow_desc = flow_desc[0].split('<')
-                    func = lower
+            default = None
+            for flow in flow_split:
+                flow_desc = flow.split(':')
+                if len(flow_desc) == 1:
+                    default = flow_desc[0]
                 else:
-                    split_flow_desc = flow_desc[0].split('>')
-                    func = bigger
-                value = split_flow_desc[0]
-                compare_to = int(split_flow_desc[1])
-                target = flow_desc[1]
-                workflow.append((value, func, compare_to, target))
+                    split_flow_desc = []
+                    func = None
+                    if '<' in flow_desc[0]:
+                        split_flow_desc = flow_desc[0].split('<')
+                        func = lt
+                    else:
+                        split_flow_desc = flow_desc[0].split('>')
+                        func = gt
+                    value = split_flow_desc[0]
+                    compare_to = int(split_flow_desc[1])
+                    target = flow_desc[1]
+                    workflow.append((value, func, compare_to, target))
 
-        workflow.append(default)
-        workflows[key] = workflow
+            workflow.append(default)
+            workflows[key] = workflow
 
-    else:
-        part = {}
-        split_line = line[1:-1].split(',')
-        for elem in split_line:
-            split_elem = elem.split('=')
-            part[split_elem[0]] = int(split_elem[1])
-        parts.append(part)
+        else:
+            part = {}
+            split_line = line[1:-1].split(',')
+            for elem in split_line:
+                split_elem = elem.split('=')
+                part[split_elem[0]] = int(split_elem[1])
+            parts.append(part)
+
+    return parts, workflows
 
 
 def execute(part, workflow):
-    """
-
-    """
     for flow in workflow:
         if type(flow) is tuple:
             key, func, compare_to, target = flow
@@ -87,10 +71,7 @@ def execute(part, workflow):
             return flow
 
 
-def run_workflow(part):
-    """
-
-    """
+def run_workflow(workflows, part):
     rest = ['in']
 
     while rest:
@@ -105,7 +86,7 @@ def run_workflow(part):
     raise Exception('End reached')
 
 
-def d19p1():
+def d19p1(data):
     """
     The Elves of Gear Island are thankful for your help and send you on your way. They even have a hang glider that someone stole from Desert Island; since you're already going that direction, it would help them a lot if you would use it to get down there and return it to them.
     As you reach the bottom of the relentless avalanche of machine parts, you discover that they're already forming a formidable heap. Don't worry, though - a group of Elves is already here organizing the parts, and they have a system.
@@ -156,10 +137,11 @@ def d19p1():
     Ultimately, three parts are accepted. Adding up the x, m, a, and s rating for each of the accepted parts gives 7540 for the part with x=787, 4623 for the part with x=2036, and 6951 for the part with x=2127. Adding all of the ratings for all of the accepted parts gives the sum total of 19114.
     Sort through all of the parts you've been given; what do you get if you add together all of the rating numbers for all of the parts that ultimately get accepted?
     """
+    parts, workflows = data
     result = 0
     for part in parts:
         # print(part)
-        res = run_workflow(part)
+        res = run_workflow(workflows, part)
         if res:
             for value in part.values():
                 result += value
@@ -169,21 +151,14 @@ def d19p1():
 
 # d19p2 is still incorrect, need additional debug
 def opposite(flow):
-    """
-
-    """
     value, func, compare_to, _ = flow
-
-    if func == lower:
-        return (value, bigger, compare_to-1)
+    if func == lt:
+        return (value, gt, compare_to-1)
     else:
-        return (value, lower, compare_to+1)
+        return (value, lt, compare_to+1)
 
 
-def explore_workflow(constraints, workflow_name, current_workflow):
-    """
-
-    """
+def explore_workflow(workflows, constraints, workflow_name, current_workflow):
     # current_workflow = f'{current_workflow}{workflow_name}, '
 
     workflow = workflows[workflow_name]
@@ -208,22 +183,24 @@ def explore_workflow(constraints, workflow_name, current_workflow):
             flow_constraints.append(flow_tuple)
             rest_constraints.append(opposite(flow))
 
-            results.extend(explore_workflow(flow_constraints, target, current_workflow_copy))
+            results.extend(explore_workflow(workflows, flow_constraints, target, current_workflow_copy))
 
         target = workflow[-1]
         current_workflow = f'{current_workflow}{workflow_name}=>{target}, '
         flow_constraints = copy(constraints)
         flow_constraints = flow_constraints + rest_constraints
 
-        results.extend(explore_workflow(flow_constraints, target, current_workflow))
+        results.extend(explore_workflow(workflows, flow_constraints, target, current_workflow))
 
         return results
 
-def d19p2():
+
+def d19p2(data):
     """
 
     """
-    constraint_list = explore_workflow([], 'in', '')
+    parts, workflows = data
+    constraint_list = explore_workflow(workflows, [], 'in', '')
     constraint_list = [r for r in constraint_list if r is not None]
 
     treated = {}
@@ -239,7 +216,7 @@ def d19p2():
         }
         for c in constraint:
             value, func, compare_to = c
-            if func == lower:
+            if func == lt:
                 compare_to = compare_to - 1
                 xmas[value] = (min(xmas[value][0], compare_to), min(xmas[value][1], compare_to))
             else:

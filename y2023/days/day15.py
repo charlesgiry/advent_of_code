@@ -2,14 +2,17 @@
 aoc y2023 day 15
 https://adventofcode.com/2023/day/15
 """
-steps = []
-with open('data/day15_data.txt', 'r') as file:
-    for line in file.read().splitlines():
-        for step in line.split(','):
-            steps.append(step)
 
 
-def holiday_ascii_string_helper(step: str) -> int:
+def d15parse(data):
+    line = data[0]
+    steps = []
+    for step in line.split(','):
+        steps.append(step)
+    return steps
+
+
+def holiday_ascii_string_helper(step):
     """
     get the HASH algorithm value for a given step
     """
@@ -21,7 +24,7 @@ def holiday_ascii_string_helper(step: str) -> int:
     return current
 
 
-def d15p1() -> int:
+def d15p1(data):
     """
     The newly-focused parabolic reflector dish is sending all of the collected light to a point on the side of yet another mountain - the largest mountain on Lava Island. As you approach the mountain, you find that the light is being collected by the wall of a large facility embedded in the mountainside.
     You find a door under a large sign that says "Lava Production Facility" and next to a smaller sign that says "Danger - Personal Protective Equipment required beyond this point".
@@ -81,13 +84,13 @@ def d15p1() -> int:
     Run the HASH algorithm on each step in the initialization sequence. What is the sum of the results? (The initialization sequence is one long line; be careful when copy-pasting it.)
     """
     result = 0
-    for step in steps:
+    for step in data:
         res = holiday_ascii_string_helper(step)
         result += res
     return result
 
 
-def holiday_ascii_string_helper_arrangement_procedure(boxes: dict, step: str):
+def holiday_ascii_string_helper_arrangement_procedure(boxes, step):
     """
     Modify the box in boxes according to the current step
     """
@@ -112,7 +115,7 @@ def holiday_ascii_string_helper_arrangement_procedure(boxes: dict, step: str):
             boxes[box] = {label: focal_length}
 
 
-def d15p2():
+def d15p2(data):
     """
     You convince the reindeer to bring you the page; the page confirms that your HASH algorithm is working.
     The book goes on to describe a series of 256 boxes numbered 0 through 255. The boxes are arranged in a line starting from the point where light enters the facility. The boxes have holes that allow light to pass from one box to the next all the way down the line.
@@ -196,7 +199,7 @@ def d15p2():
     With the help of an over-enthusiastic reindeer in a hard hat, follow the initialization sequence. What is the focusing power of the resulting lens configuration?
     """
     boxes = {}
-    for step in steps:
+    for step in data:
         holiday_ascii_string_helper_arrangement_procedure(boxes, step)
 
     result = 0

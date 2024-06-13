@@ -4,25 +4,24 @@ https://adventofcode.com/2023/day/11
 """
 from itertools import combinations
 
-with open('data/day11_data.txt', 'r') as file:
-    # read the file
-    lines = file.read().splitlines()
-    max_y = len(lines)
-    max_x = len(lines[0])
+
+def d11parse(data):
+    max_y = len(data)
+    max_x = len(data[0])
 
     # find the cosmic growth lines
     add_lines = []
-    for i in range(len(lines)):
-        line = lines[i]
+    for i in range(len(data)):
+        line = data[i]
         if '#' not in line:
             add_lines.append(i)
 
     # find the cosmic growth columns
     add_rows = []
-    for i in range(len(lines[0])):
+    for i in range(len(data[0])):
         hash_number = 0
-        for j in range(len(lines)):
-            if lines[j][i] == '#':
+        for j in range(len(data)):
+            if data[j][i] == '#':
                 hash_number += 1
 
         if hash_number == 0:
@@ -32,13 +31,15 @@ with open('data/day11_data.txt', 'r') as file:
     galaxies = set()
     for y in range(max_y):
         for x in range(max_x):
-            if lines[y][x] == '#':
+            if data[y][x] == '#':
                 galaxies.add((y, x))
 
     galaxy_pairs = set(combinations(galaxies, 2))
 
+    return (galaxy_pairs, add_lines, add_rows)
 
-def get_result(galaxy_growth):
+
+def get_result(galaxy_pairs, add_lines, add_rows, galaxy_growth):
     """
     calculate the expected result by taking into account galaxy growth
     """
@@ -69,7 +70,7 @@ def get_result(galaxy_growth):
     return result
 
 
-def d11p1():
+def d11p1(data):
     """
     You continue following signs for "Hot Springs" and eventually come across an observatory. The Elf within turns out to be a researcher studying cosmic expansion using the giant telescope here.
     He doesn't know anything about the missing machine parts; he's only visiting for this research project. However, he confirms that the hot springs are the next-closest area likely to have people; he'll even take you straight there once he's done with today's observation analysis.
@@ -159,14 +160,16 @@ def d11p1():
     In this example, after expanding the universe, the sum of the shortest path between all 36 pairs of galaxies is 374.
     Expand the universe, then find the length of the shortest path between every pair of galaxies. What is the sum of these lengths?
     """
-    return get_result(2)
+    galaxy_pairs, add_lines, add_rows = data
+    return get_result(galaxy_pairs, add_lines, add_rows, 2)
 
 
-def d11p2():
+def d11p2(data):
     """
     The galaxies are much older (and thus much farther apart) than the researcher initially estimated.
     Now, instead of the expansion you did before, make each empty row or column one million times larger. That is, each empty row should be replaced with 1000000 empty rows, and each empty column should be replaced with 1000000 empty columns.
     (In the example above, if each empty row or column were merely 10 times larger, the sum of the shortest paths between every pair of galaxies would be 1030. If each empty row or column were merely 100 times larger, the sum of the shortest paths between every pair of galaxies would be 8410. However, your universe will need to expand far beyond these values.)
     Starting with the same initial image, expand the universe according to these new rules, then find the length of the shortest path between every pair of galaxies. What is the sum of these lengths?
     """
-    return get_result(1000000)
+    galaxy_pairs, add_lines, add_rows = data
+    return get_result(galaxy_pairs, add_lines, add_rows, 1000000)

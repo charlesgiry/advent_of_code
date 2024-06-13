@@ -2,16 +2,18 @@
 aoc y2023 day 18
 https://adventofcode.com/2023/day/18
 """
-import re
+from re import compile
+
 
 UP = (-1, 0)
 DOWN = (1, 0)
 LEFT = (0, -1)
 RIGHT = (0, 1)
 
-with open('data/day18_data.txt', 'r') as file:
+
+def d18parse(data):
     lines = []
-    for line in file.read().splitlines():
+    for line in data:
         parsed_line = {}
         # R 6 (#70c710)
         split_line = line.split()
@@ -29,6 +31,7 @@ with open('data/day18_data.txt', 'r') as file:
         parsed_line['hex'] = split_line[2][1:-1]
 
         lines.append(parsed_line)
+    return lines
 
 
 def get_edges(input_data):
@@ -51,7 +54,7 @@ def get_edges(input_data):
     return edges
 
 
-def shoelace(edges: list[tuple[int:int]]):
+def shoelace(edges):
     """
     Shoelace formula that also takes into account the edges themselves, not just the content
     """
@@ -68,7 +71,7 @@ def shoelace(edges: list[tuple[int:int]]):
     return area
 
 
-def d18p1():
+def d18p1(data):
     """
     Thanks to your efforts, the machine parts factory is one of the first factories up and running since the lavafall came back. However, to catch up with the large backlog of parts requests, the factory will also need a large supply of lava for a while; the Elves have already started creating a large lagoon nearby for this purpose.
     However, they aren't sure the lagoon will be big enough; they've asked you to take a look at the dig plan (your puzzle input). For example:
@@ -118,112 +121,12 @@ def d18p1():
     Now, the lagoon can contain a much more respectable 62 cubic meters of lava. While the interior is dug out, the edges are also painted according to the color codes in the dig plan.
     The Elves are concerned the lagoon won't be large enough; if they follow their dig plan, how many cubic meters of lava could it hold?
     """
-    edges = get_edges(lines)
+    edges = get_edges(data)
     cubic_meter = shoelace(edges)
     return cubic_meter
 
 
-def d18p1_ray_tracing():
-    """
-    resolving d18p1 by actually drawing a map like it is represented in example:
-        #######
-        #.....#
-        ###...#
-        ..#...#
-        ..#...#
-        ###.###
-        #...#..
-        ##..###
-        .#....#
-        .######
-    and then filling it through ray tracing
-        #######
-        #######
-        #######
-        ..#####
-        ..#####
-        #######
-        #####..
-        #######
-        .######
-        .######
-    to finally count the #
-    """
-    # get a size for the lagoon matrix
-    max_y = 1
-    max_x = 1
-    for line in lines:
-        if line['dir'] == RIGHT:
-            max_x += line['len']
-        if line['dir'] == DOWN:
-            max_y += line['len']
-
-    # If program crashes, change these max_y and max_x values
-    # to make sure you're generating a big enough array to draw in
-    # the idea here was to make it faster by not generating many useless line
-    max_y = int(max_y / 2) + 1
-    max_x = int(max_x / 2) + 1
-    # max_y = max_y * 2
-    # max_x = max_x * 2
-
-    # draw the lagoon borders
-    lagoon = [
-        ['.' for _ in range(max_x)] for _ in range(max_y)
-    ]
-    y = int(max_y / 2)
-    x = 0
-    lagoon[y][x] = '#'
-    for line in lines:
-        ym, xm = line['dir']
-        for _ in range(line['len']):
-            # because line['dir'] is a tuple representing the position of next point
-            # you get next point by adding these values
-            # ex: (y = 10, x = 15), (ym = 0, xm = -1) => (10, 14)
-            # you iterate that as many times as the input puzzle tells us for each line
-            y += ym
-            x += xm
-            lagoon[y][x] = '#'
-
-    # transform the vertical edges into another character to be able to detect them easily
-    for y in range(max_y):
-        for x in range(max_x):
-            if lagoon[y][x] == '#':
-                if y-1 > 0 and lagoon[y-1][x] in ['#', '|']:
-                    lagoon[y][x] = '|'
-
-    # transform the lists representing each line into a str, for faster analysis with regexp
-    str_lagoon = []
-    for y in range(max_y):
-        str_lagoon.append(''.join(lagoon[y][x] for x in range(max_x)))
-
-    # use ray tracing to find whether each '.'' is within the polygon or not.
-    # if within, replace the value with '#' and add one to cubic_meter
-    # also add one for each # or |
-    cubic_meter = 0
-    regexp = re.compile(r'(\|)')
-    for y in range(max_y):
-        for x in range(max_x):
-            if lagoon[y][x] == '.':
-                if len(regexp.findall(str_lagoon[y][x:])) % 2 == 1:
-                    lagoon[y][x] = '#'
-                    cubic_meter += 1
-            else:
-                cubic_meter += 1
-
-    # write to file to visualize
-    # with open('d18p1_unfilled.txt', 'w') as file:
-    #     for y in range(max_y):
-    #         file.write(str_lagoon[y] + '\n')
-    #
-    # with open('d18p1_filled.txt', 'w') as file:
-    #     for y in range(max_y):
-    #         filled_lagoon = ''.join(lagoon[y][x] for x in range(max_x))
-    #         file.write(filled_lagoon + '\n')
-
-    return cubic_meter
-
-
-def d18p2():
+def d18p2(data):
     """
     The Elves were right to be concerned; the planned lagoon would be much too small.
     After a few minutes, someone realizes what happened; someone swapped the color and instruction parameters when producing the dig plan. They don't have time to fix the bug; one of them asks if you can extract the correct instructions from the hexadecimal codes.
@@ -250,7 +153,7 @@ def d18p2():
     """
     # parse the line using the hex as expected
     converted_lines = []
-    for line in lines:
+    for line in data:
         parsed_hex = {
             'len': int(line['hex'][1:-1], base=16)
         }

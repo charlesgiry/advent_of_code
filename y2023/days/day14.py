@@ -2,10 +2,6 @@
 aoc y2023 day 14
 https://adventofcode.com/2023/day/14
 """
-from copy import copy
-
-with open('data/day14_data.txt', 'r') as file:
-    lines = file.read().splitlines()
 
 
 def move_stone_y_axis(array: list[str], up: bool):
@@ -55,8 +51,7 @@ def count_weight(array):
                 result += (len(array) - y)
     return result
 
-
-def d14p1():
+def d14p1(data):
     """
     You reach the place where all of the mirrors were pointing: a massive parabolic reflector dish attached to the side of another large mountain.
     The dish is made up of many small mirrors, but while the mirrors themselves are roughly in the shape of a parabolic reflector dish, each individual mirror seems to be pointing in slightly the wrong direction. If the dish is meant to focus light, all it's doing right now is sending it in a vague direction.
@@ -105,7 +100,7 @@ def d14p1():
     The total load is the sum of the load caused by all of the rounded rocks. In this example, the total load is 136.
     Tilt the platform so that the rounded rocks all roll north. Afterward, what is the total load on the north support beams?
     """
-    l = move_stone_y_axis(lines, up=True)
+    l = move_stone_y_axis(data, up=True)
     return count_weight(l)
 
 
@@ -166,7 +161,7 @@ def run_cycle(array: list[str]) -> list[str]:
     return l
 
 
-def d14p2():
+def d14p2(data):
     """
     The parabolic reflector dish deforms, but not in a way that focuses the beam. To do that, you'll need to move the rocks to the edges of the platform. Fortunately, a button on the side of the control panel labeled "spin cycle" attempts to do just that!
     Each cycle tilts the platform four times so that the rounded rocks roll north, then west, then south, then east. After each tilt, the rounded rocks roll as far as they can before the platform tilts in the next direction. After one cycle, the platform will have finished rolling the rounded rocks in those four directions in that order.
@@ -212,7 +207,7 @@ def d14p2():
     In the above example, after 1000000000 cycles, the total load on the north support beams is 64.
     Run the spin cycle for 1000000000 cycles. Afterward, what is the total load on the north support beams?
     """
-    l = lines
+    l = data
     results = []
     result_encountered = {}
 

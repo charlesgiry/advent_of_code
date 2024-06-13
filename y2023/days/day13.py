@@ -2,25 +2,26 @@
 aoc y2023 day 13
 https://adventofcode.com/2023/day/13
 """
-with open('data/day13_data.txt', 'r') as file:
-    lines = file.read().splitlines()
+
+
+def d13parse(data):
     vertical_puzzles = []
     horizontal_puzzles = []
 
-    vertical_puzzle = ['' for i in range(len(lines[0]))]
+    vertical_puzzle = ['' for i in range(len(data[0]))]
     horizontal_puzzle = []
 
-    for i in range(len(lines)):
-        line = lines[i]
+    for i in range(len(data)):
+        line = data[i]
 
-        if i == len(lines) - 1:
+        if i == len(data) - 1:
             vertical_puzzles.append(vertical_puzzle)
             horizontal_puzzles.append(horizontal_puzzle)
 
         if line == '':
             vertical_puzzles.append(vertical_puzzle)
             horizontal_puzzles.append(horizontal_puzzle)
-            vertical_puzzle = ['' for i in range(len(lines[i+1]))]
+            vertical_puzzle = ['' for i in range(len(data[i+1]))]
             horizontal_puzzle = []
 
         else:
@@ -28,6 +29,7 @@ with open('data/day13_data.txt', 'r') as file:
             for j in range(len(line)):
                 vertical_puzzle[j] += line[j]
 
+    return (horizontal_puzzles, vertical_puzzles)
 
 def find_symmetry(puzzle):
     """
@@ -48,7 +50,7 @@ def find_symmetry(puzzle):
     return 0
 
 
-def d13p1():
+def d13p1(data):
     """
     With your help, the hot springs team locates an appropriate spring which launches you neatly and precisely up to the edge of Lava Island.
     There's just one problem: you don't see any lava.
@@ -104,6 +106,7 @@ def d13p1():
     To summarize your pattern notes, add up the number of columns to the left of each vertical line of reflection; to that, also add 100 multiplied by the number of rows above each horizontal line of reflection. In the above example, the first pattern's vertical line has 5 columns to its left and the second pattern's horizontal line has 4 rows above it, a total of 405.
     Find the line of reflection in each of the patterns in your notes. What number do you get after summarizing all of your notes?
     """
+    horizontal_puzzles, vertical_puzzles = data
     result = 0
 
     for i in range(len(horizontal_puzzles)):
@@ -158,7 +161,7 @@ def fix_smudge(puzzle, smudge):
     return 0
 
 
-def d13p2():
+def d13p2(data):
     """
     You resume walking through the valley of mirrors and - SMACK! - run directly into one. Hopefully nobody was watching, because that must have been pretty embarrassing.
     Upon closer inspection, you discover that every mirror has exactly one smudge: exactly one . or # should be the opposite type.
@@ -206,6 +209,7 @@ def d13p2():
     Summarize your notes as before, but instead use the new different reflection lines. In this example, the first pattern's new horizontal line has 3 rows above it and the second pattern's new horizontal line has 1 row above it, summarizing to the value 400.
     In each pattern, fix the smudge and find the different line of reflection. What number do you get after summarizing the new reflection line in each pattern in your notes?
     """
+    horizontal_puzzles, vertical_puzzles = data
     result = 0
     for i in range(len(horizontal_puzzles)):
         horizontal_puzzle = horizontal_puzzles[i]

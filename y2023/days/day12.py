@@ -6,14 +6,15 @@ from copy import copy
 from functools import cache
 
 
-records = []
-with open('data/day12_data.txt', 'r') as file:
-    lines = file.read().splitlines()
-    for line in lines:
+def d12parse(data):
+    records = []
+    for line in data:
         split_line = line.split()
         springs = split_line[0]
         groups = [int(x) for x in split_line[1].split(',')]
         records.append((springs, groups))
+
+    return records
 
 
 def count_possibilities(springs, groups):
@@ -57,7 +58,7 @@ def count_possibilities(springs, groups):
     return internal(0, 0)
 
 
-def d12p1():
+def d12p1(data):
     """
     You finally reach the hot springs! You can see steam rising from secluded areas attached to the primary, ornate building.
     As you turn to enter, the researcher stops you. "Wait - I thought you were looking for the hot springs, weren't you?" You indicate that this definitely looks like hot springs to you.
@@ -118,12 +119,12 @@ def d12p1():
     For each row, count all of the different arrangements of operational and broken springs that meet the given criteria. What is the sum of those counts?
     """
     result = 0
-    for springs, groups in records:
+    for springs, groups in data:
         result += count_possibilities(springs, groups)
     return result
 
 
-def d12p2():
+def d12p2(data):
     """
     As you look out at the field of springs, you feel like there are way more springs than the condition records list. When you examine the records, you discover that they were actually folded up this whole time!
     To unfold the records, on each row, replace the list of spring conditions with five copies of itself (separated by ?) and replace the list of contiguous groups of damaged springs with five copies of itself (separated by ,).
@@ -153,7 +154,7 @@ def d12p2():
     Unfold your condition records; what is the new sum of possible arrangement counts?
     """
     result = 0
-    for springs, groups in records:
+    for springs, groups in data:
         # unfold the values
         springs = '?'.join(springs for i in range(5))
         g = copy(groups)
@@ -165,54 +166,3 @@ def d12p2():
         result += count_possibilities(springs, groups)
 
     return result
-
-
-def manual_memoized_count(springs, groups):
-    """
-    manual implementation of a memoize to test out
-    """
-    def valid_group(current, length):
-        """
-        Check whether the substring starting at current and ending at current + length
-        is a group composed by #s and ?s
-        """
-        return '.' not in springs[current:current + length] \
-            and current + length <= len(springs) \
-            and (current + length == len(springs) or springs[current + length] in ['.', '?'])
-
-    MEMO = {}
-    def manual_memoized(current, current_group):
-        """
-
-        """
-        if (current, current_group) in MEMO:
-            return MEMO[(current, current_group)]
-        else:
-            if current_group == len(groups):
-                res = int('#' not in springs[current:])
-                MEMO[(current, current_group)] = res
-                return res
-
-            if current >= len(springs):
-                MEMO[(current, current_group)] = 0
-                return 0
-
-            spring = springs[current]
-            group = groups[current_group]
-            if spring == '#':
-                if valid_group(current, group):
-                    res = manual_memoized(current + group + 1, current_group + 1)
-                    MEMO[(current, current_group)] = res
-                    return res
-                else:
-                    MEMO[(current, current_group)] = 0
-                    return 0
-
-            elif spring == '?':
-                if valid_group(current, group):
-                    res = manual_memoized(current + group + 1, current_group + 1) + manual_memoized(current + 1, current_group)
-                    MEMO[(current, current_group)] = res
-                    return res
-
-            return manual_memoized(current+1, current_group)
-    return manual_memoized(0, 0)

@@ -2,8 +2,6 @@
 aoc y2023 day 16
 https://adventofcode.com/2023/day/16
 """
-with open('data/day16_data.txt', 'r') as file:
-    lines = file.read().splitlines()
 
 
 UP = 0
@@ -11,11 +9,8 @@ LEFT = 1
 DOWN = 2
 RIGHT = 3
 
-max_y = len(lines)
-max_x = len(lines[0])
 
-
-def move_rays(start_y, start_x, start_direction):
+def move_rays(lines, start_y, start_x, max_y, max_x, start_direction):
     """
     Return the number of energized tiles by the ray defined by params
     """
@@ -74,7 +69,7 @@ def move_rays(start_y, start_x, start_direction):
     return result
 
 
-def d16p1():
+def d16p1(data):
     """
     With the beam of light completely focused somewhere, the reindeer leads you deeper still into the Lava Production Facility. At some point, you realize that the steel facility walls have been replaced with cave, and the doorways are just cave, and the floor is cave, and you're pretty sure this is actually just a giant cave.
     Finally, as you approach what must be the heart of the mountain, you see a bright light in a cavern up ahead. There, you discover that the beam of light you so carefully focused is emerging from the cavern wall closest to the facility and pouring all of its energy into a contraption on the opposite side.
@@ -130,10 +125,12 @@ def d16p1():
     Ultimately, in this example, 46 tiles become energized.
     The light isn't energizing enough tiles to produce lava; to debug the contraption, you need to start by analyzing the current situation. With the beam starting in the top-left heading right, how many tiles end up being energized?
     """
-    return move_rays(0, 0, RIGHT)
+    max_y = len(data)
+    max_x = len(data[0])
+    return move_rays(data, 0, 0, max_y, max_x, RIGHT)
 
 
-def d16p2():
+def d16p2(data):
     """
     As you try to work out what might be wrong, the reindeer tugs on your shirt and leads you to a nearby control panel. There, a collection of buttons lets you align the contraption so that the beam enters from any edge tile and heading away from that edge. (You can choose either of two directions for the beam if it starts on a corner; for instance, if the beam starts in the bottom-right corner, it can start heading either left or upward.)
     So, the beam could start on any tile in the top row (heading downward), any tile in the bottom row (heading upward), any tile in the leftmost column (heading right), or any tile in the rightmost column (heading left). To produce lava, you need to find the configuration that energizes as many tiles as possible.
@@ -165,14 +162,16 @@ def d16p2():
 
     Find the initial beam configuration that energizes the largest number of tiles; how many tiles are energized in that configuration?
     """
+    max_y = len(data)
+    max_x = len(data[0])
     results = []
 
     for y in range(max_y):
-        results.append(move_rays(y, 0, RIGHT))
-        results.append(move_rays(y, max_x-1, LEFT))
+        results.append(move_rays(data, y, 0, max_y, max_x, RIGHT))
+        results.append(move_rays(data, y, max_x - 1, max_y, max_x, LEFT))
 
     for x in range(max_x):
-        results.append(move_rays(0, x, DOWN))
-        results.append(move_rays(max_y-1, x, UP))
+        results.append(move_rays(data, 0, x, max_y, max_x, DOWN))
+        results.append(move_rays(data, max_y - 1, x, max_y, max_x, UP))
 
     return max(results)
