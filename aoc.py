@@ -3,11 +3,11 @@
 
 """
 from argparse import ArgumentParser, Namespace
-from datetime import datetime
+from datetime import datetime, timezone
 from importlib import import_module
 from pathlib import Path
 
-from utils import measure, fopen
+from utils import measure, fopen, logger
 
 
 def main(args: Namespace):
@@ -41,13 +41,13 @@ def main(args: Namespace):
                                 func = getattr(module, func_name)
                                 measure(func, data, show_args=False, show_result=True)
 
-                    print('')
+                    logger.info('')
 
 
 if __name__ == '__main__':
     parser = ArgumentParser()
 
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
     max_year = now.year + 1 if now.month == 12 else now.year
     parser.add_argument(
         '-y', '--year',
