@@ -17,5 +17,6 @@ from y2023.days.day13 import d13parse, d13p1, d13p2
 from y2023.days.day14 import d14p1, d14p2
 from y2023.days.day15 import d15parse, d15p1, d15p2
 from y2023.days.day16 import d16p1, d16p2
+from y2023.days.day17 import d17p1, d17p2
 from y2023.days.day18 import d18parse, d18p1, d18p2
 from y2023.days.day19 import d19parse, d19p1, d19p2
