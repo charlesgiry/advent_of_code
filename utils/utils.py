@@ -53,3 +53,24 @@ def fopen(filepath):
         for l in file.read().splitlines():
             lines.append(l)
     return lines
+
+
+class timing:
+    """
+    Measure the time taken between the start and the end of a code snippet
+    use:
+    with timing('text to write at the end'):
+        code snippet
+    """
+    start: float
+    text: str
+
+    def __init__(self, text: str):
+        self.text = text
+
+    def __enter__(self):
+        self.start = perf_counter()
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        perf = "{:.6f}".format(perf_counter() - self.start)
+        logger.info(f'{self.text} - took {perf}s')
