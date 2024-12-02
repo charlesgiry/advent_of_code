@@ -36,7 +36,7 @@ def new():
     """
     now = datetime.now(timezone.utc)
 
-    # create folder if it doesn't exist
+    # get year
     y = input('Please enter a year. If left empty, current year will be used\n')
     if y == '':
         y = now.year
@@ -85,7 +85,6 @@ def new():
             file.write(f'y{y} code for each day\n')
             file.write('"""\n')
 
-    # create actual python file
     # Get date
     d = input('Please enter a day. If left empty, current day will be used\n')
     if d == '':
@@ -95,19 +94,20 @@ def new():
     except ValueError:
         print('Error, d should be a number')
         exit(45)
+    # d1c for day with 1 character if < 10. d2c for day with 2 characters always
     d1c = d
     d2c = d
     if len(d) == 1:
         d2c = f'0{d}'
 
-    # edit top comment
+    # perpare file
     top_comment = f'aoc y{y} day {d2c}\n'
     top_comment += f'https://adventofcode.com/{y}/day/{d1c}'
-
-    # create file
     current_file = FILE_SKELETON
     current_file = re.sub('TOP_COMMENT', top_comment, current_file)
     current_file = re.sub('X', d1c, current_file)
+
+    # create file
     file_path = days / f'day{d2c}.py'
     with open(file_path, 'w') as file:
         file.write(current_file)
@@ -116,7 +116,6 @@ def new():
     with open(days_init, 'a') as file:
         file.write(f'from y{y}.days.day{d2c} import d{d1c}p1, d{d1c}p2, d{d1c}parse')
 
-
     # create empty data file
     with open(data / f'day{d2c}.txt', "w") as file:
-        file.write('')
+        file.write('\n')
