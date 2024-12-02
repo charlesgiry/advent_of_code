@@ -106,13 +106,3 @@ def d1p2(data):
             result += (i * number[i])
 
     print(result)
-
-
-if __name__ == '__main__':
-
-    with open('../data/day01.txt') as f:
-        data = f.read().splitlines()
-
-    data = d1parse(data)
-    d1p1(data)
-    d1p2(data)
