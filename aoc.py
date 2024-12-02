@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from importlib import import_module
 from pathlib import Path
 
-from utils import measure, fopen, logger, timing
+from utils import measure, fopen, logger, timing, new
 
 
 def main(args: Namespace):
@@ -89,6 +89,13 @@ if __name__ == '__main__':
         dest='old'
     )
 
+    parser.add_argument(
+        '-n', '--new-day',
+        help='Generate code skeleton for a new day',
+        action='store_true',
+        dest='new'
+    )
+
     args = parser.parse_args()
 
     if args.year is None:
@@ -100,4 +107,7 @@ if __name__ == '__main__':
     if args.part is None:
         args.part = [1, 2]
 
-    measure(main, args, show_args=False, show_result=False)
+    if args.new:
+        new()
+    else:
+        measure(main, args, show_args=False, show_result=False)
