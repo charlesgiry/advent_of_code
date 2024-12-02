@@ -105,4 +105,4 @@ def d1p2(data):
         if i in number:
             result += (i * number[i])
 
-    print(result)
+    return result
