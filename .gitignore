@@ -159,4 +159,5 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 .idea/
 
-*.txt
+# to ignore txt files, use git update-index --assume-unchanged
+# that way they're created on the repo, but will be left empty
