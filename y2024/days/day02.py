@@ -133,10 +133,24 @@ def d2p2(data):
                 if valid(remove(line, i)):
                     result += 1
                     break
+
                 if i >= 1 and valid(remove(line, i-1)):
                     result += 1
                     break
+
                 if i < len(line) -1 and valid(remove(line, i+1)):
+                    result += 1
+                    break
+    return result
+
+def d2p2_old(data):
+    result = 0
+    for line in data:
+        if valid(line):
+            result += 1
+        else:
+            for i in range(len(line)):
+                if valid(remove(line, i)):
                     result += 1
                     break
     return result
