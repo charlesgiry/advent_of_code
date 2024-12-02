@@ -26,6 +26,7 @@ def d3p1(data):
     x = 0
     y = 0
     visited = set()
+    visited.add((x, y))
 
     for move in data:
         if move == '<':
