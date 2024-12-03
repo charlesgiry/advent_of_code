@@ -15,7 +15,8 @@ def d2parse(data):
         results.append([int(x) for x in split_line])
     return results
 
-def constant_direction(line: list[int]):
+
+def monotonic(line: list[int]):
     """
     Check that all the elements of a list follow the same order from first to last element
     """
@@ -24,6 +25,7 @@ def constant_direction(line: list[int]):
         if not (function(line[i], line[i+1])):
             return False
     return True
+
 
 def adjacent_difference(line: list[int]):
     """
@@ -34,11 +36,13 @@ def adjacent_difference(line: list[int]):
             return False
     return True
 
+
 def valid(line: list[int]):
     """
     Check both rules above
     """
-    return constant_direction(line) and adjacent_difference(line)
+    return monotonic(line) and adjacent_difference(line)
+
 
 def d2p1(data):
     """
@@ -74,7 +78,7 @@ def d2p1(data):
     """
     result = 0
     for line in data:
-        if constant_direction(line) and adjacent_difference(line):
+        if valid(line):
             result += 1
     return result
 
@@ -88,6 +92,7 @@ def remove(line: list[int], pos: int):
     if pos == len(line) - 1:
         return line[:-1]
     return line[:pos] + line[pos+1:]
+
 
 def index_of_fail(line):
     """
@@ -125,25 +130,27 @@ def d2p2(data):
     """
     result = 0
     for line in data:
-        if valid(line):
+        fails = index_of_fail(line)
+        if not fails:
             result += 1
         else:
-            fails = index_of_fail(line)
             for i in fails:
                 if valid(remove(line, i)):
                     result += 1
                     break
-
                 if i >= 1 and valid(remove(line, i-1)):
                     result += 1
                     break
-
                 if i < len(line) -1 and valid(remove(line, i+1)):
                     result += 1
                     break
     return result
 
+
 def d2p2_old(data):
+    """
+    brute force solution
+    """
     result = 0
     for line in data:
         if valid(line):
