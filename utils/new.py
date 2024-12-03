@@ -2,6 +2,7 @@
 
 """
 from datetime import datetime, timezone
+from os import system
 from pathlib import Path
 import re
 
@@ -16,11 +17,13 @@ def dXparse(data):
     """
     return data
 
+
 def dXp1(data):
     """
     
     """
     pass
+
 
 def dXp2(data):
     """
@@ -108,14 +111,18 @@ def new():
     current_file = re.sub('X', d1c, current_file)
 
     # create file
-    file_path = days / f'day{d2c}.py'
-    with open(file_path, 'w') as file:
-        file.write(current_file)
+    exec_file = days / f'day{d2c}.py'
+    if not exec_file.exists():
+        with open(exec_file, 'w') as file:
+            file.write(current_file)
 
-    # append newly created file to __init__.py
-    with open(days_init, 'a') as file:
-        file.write(f'from y{y}.days.day{d2c} import d{d1c}p1, d{d1c}p2, d{d1c}parse')
+        # append newly created file to __init__.py
+        with open(days_init, 'a') as file:
+            file.write(f'from y{y}.days.day{d2c} import d{d1c}p1, d{d1c}p2, d{d1c}parse\n')
 
     # create empty data file
-    with open(data / f'day{d2c}.txt', "w") as file:
-        file.write('\n')
+    data_file = data / f'day{d2c}.txt'
+    if not data_file.exists():
+        with open(data_file, "w") as file:
+            file.write('')
+        system(f'git update-index --assume-unchanged "{str(data_file)}"')
