@@ -9,6 +9,9 @@ operations = {}
 
 
 def d7parse(data):
+    """
+    parse
+    """
     for line in data:
         operation, result = line.split(' -> ')
         operations[result] = operation.split()
@@ -17,6 +20,9 @@ def d7parse(data):
 
 @cache
 def explore(value):
+    """
+
+    """
     if value.isdigit():
         return int(value)
 
@@ -40,10 +46,16 @@ def explore(value):
 
 
 def d7p1(data):
+    """
+
+    """
     return explore('a')
 
 
 def d7p2(data):
+    """
+
+    """
     result = explore('a')
     operations['b'] = [str(result)]
     explore.cache_clear()

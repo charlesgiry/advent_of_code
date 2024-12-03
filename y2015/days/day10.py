@@ -5,10 +5,16 @@ https://adventofcode.com/2015/day/10
 
 
 def d10parse(data):
+    """
+    parse
+    """
     return data[0]
 
 
 def look_and_say(start):
+    """
+
+    """
     current = ''
     current_number = 0
 
@@ -29,6 +35,9 @@ def look_and_say(start):
 
 
 def d10p1(data):
+    """
+    part 1
+    """
     current = data
     for i in range(40):
         current = look_and_say(current)
@@ -36,6 +45,9 @@ def d10p1(data):
 
 
 def d10p2(data):
+    """
+    part 2
+    """
     current = data
     for i in range(50):
         current = look_and_say(current)

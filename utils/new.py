@@ -2,7 +2,6 @@
 
 """
 from datetime import datetime, timezone
-from os import system
 from pathlib import Path
 import re
 
@@ -13,21 +12,21 @@ TOP_COMMENT
 
 def dXparse(data):
     """
-    
+    parse
     """
     return data
 
 
 def dXp1(data):
     """
-    
+    part 1
     """
     pass
 
 
 def dXp2(data):
     """
-    
+    part 2
     """
     pass
 '''
@@ -125,4 +124,3 @@ def new():
     if not data_file.exists():
         with open(data_file, "w") as file:
             file.write('')
-        system(f'git update-index --assume-unchanged "{str(data_file)}"')
