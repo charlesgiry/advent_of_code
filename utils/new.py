@@ -103,8 +103,8 @@ def new():
         d2c = f'0{d}'
 
     # perpare file
-    top_comment = f'aoc y{y} day {d2c}\n'
-    top_comment += f'https://adventofcode.com/{y}/day/{d1c}'
+    top_comment = f'aoc y{y} day {d2c}\n' \
+                  f'https://adventofcode.com/{y}/day/{d1c}'
     current_file = FILE_SKELETON
     current_file = re.sub('TOP_COMMENT', top_comment, current_file)
     current_file = re.sub('X', d1c, current_file)
