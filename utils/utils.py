@@ -36,7 +36,7 @@ def measure(func, *args, **kwargs):
     else:
         perf = perf_counter() - start
         perf = "{:.6f}".format(perf)
-        if result and show_result:
+        if result is not None and show_result:
             print_str = f'{print_str} : {result} - took {perf}s'
         else:
             print_str = f'{print_str} - took {perf}s'
