@@ -8,3 +8,4 @@ from y2024.days.day04 import d4p1, d4p2, d4parse
 # from y2024.days.day04c import d4p1, d4p2, d4parse
 from y2024.days.day05 import d5p1, d5p2, d5parse
 from y2024.days.day06 import d6p1, d6p2, d6parse
+from y2024.days.day07 import d7p1, d7p2, d7parse

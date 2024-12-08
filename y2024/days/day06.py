@@ -4,6 +4,7 @@ https://adventofcode.com/2024/day/6
 """
 from numpy import array, argwhere
 
+
 UP = 0
 RIGHT = 1
 DOWN = 2
@@ -16,9 +17,25 @@ def d6parse(data):
     """
     arr = array([list(line) for line in data], dtype='U1')
     startpos = tuple(int(i) for i in argwhere(arr == '^')[0])
-    obstacles = set()
+    obstacles = {
+        'x': {},
+        'y': {}
+    }
     for elem in argwhere(arr == '#'):
-        obstacles.add(tuple(int(i) for i in elem))
+        y = int(elem[0])
+        x = int(elem[1])
+
+        if x not in obstacles['x']:
+            obstacles['x'][x] = []
+
+        if y not in obstacles['y']:
+            obstacles['y'][y] = []
+
+        obstacles['x'][x].append(y)
+        obstacles['y'][y].append(x)
+
+    for key, values in obstacles['x'].items():
+        obstacles['x'][key] = sorted(values)
 
     return {
         'arr': arr,
@@ -27,118 +44,99 @@ def d6parse(data):
     }
 
 
-def d6p1(data):
-    """
-    part 1
-    """
-    arr = data['arr']
-    startpos = data['startpos']
-    obstacles = data['obstacles']
+def walk(arr, current_pos, current_dir):
+    walked = set()
+    walked.add((current_pos, current_dir))
+
     max_x = arr.shape[1]
     max_y = arr.shape[0]
-    current_dir = UP
-    visited = set()
-    y, x = startpos
+    y, x = current_pos
 
-    while (0 < x < max_x-1) and (0 < y < max_y-1):
-        met_obstacle = False
-        for obstacle in obstacles:
-            if current_dir == UP and obstacle[1] == x and obstacle[0] < y:
-                for i in range(y, obstacle[0], -1):
-                    visited.add((i, x))
-                    arr[i][x] = '^'
-                y = obstacle[0] + 1
+    while (0 < x < max_x-1 and 0 < y < max_y-1):
+        if current_dir == UP:
+            if arr[y-1, x] == '#':
                 current_dir = RIGHT
-                met_obstacle = True
-                # for line in arr:
-                #     str = ''.join(line)
-                #     print(str)
-                # print('--------------------------------')
-                # print('')
-
-            elif current_dir == RIGHT and obstacle[0] == y and obstacle[1] > x:
-                for i in range(x, obstacle[1]):
-                    visited.add((y, i))
-                    arr[y][i] = '>'
-                x = obstacle[1] - 1
-                current_dir = DOWN
-                met_obstacle = True
-                # for line in arr:
-                #     str = ''.join(line)
-                #     print(str)
-                # print('--------------------------------')
-                # print('')
-
-            elif current_dir == DOWN and obstacle[1] == x and obstacle[0] > y:
-                for i in range(y, obstacle[0]):
-                    visited.add((i, x))
-                    arr[i][x] = 'v'
-                y = obstacle[0] - 1
-                current_dir = LEFT
-                met_obstacle = True
-                # for line in arr:
-                #     str = ''.join(line)
-                #     print(str)
-                # print('--------------------------------')
-                # print('')
-
-            elif current_dir == LEFT and obstacle[0] == y and obstacle[1] < x:
-                for i in range(x, obstacle[1], -1):
-                    visited.add((y, i))
-                    arr[y][i] = '<'
-                x = obstacle[1] + 1
-                current_dir = UP
-                met_obstacle = True
-                # for line in arr:
-                #     str = ''.join(line)
-                #     print(str)
-                # print('--------------------------------')
-                # print('')
-
-        if not met_obstacle:
-            if current_dir == UP:
-                for i in range(y, -1, -1):
-                    visited.add((i, x))
-                    arr[i][x] = '^'
-                y = 0
-
-            elif current_dir == RIGHT:
-                for i in range(x, max_x):
-                    visited.add((y, i))
-                    arr[y][i] = '>'
-                x = max_x
-
-            elif current_dir == DOWN:
-                for i in range(y, max_y):
-                    visited.add((i, x))
-                    arr[i][x] = 'v'
-                y = max_y
-
             else:
-                for i in range(x, -1, -1):
-                    visited.add((y, i))
-                    arr[y][i] = '<'
-                x = 0
+                y -= 1
 
-    
-    # for line in arr:
-    #     str = ''.join(line)
-    #     print(str)
+        elif current_dir == RIGHT:
+            if arr[y, x+1] == '#':
+                current_dir = DOWN
+            else:
+                x += 1
 
-    return len(visited)
+        elif current_dir == DOWN:
+            if arr[y+1, x] == '#':
+                current_dir = LEFT
+            else:
+                y += 1
+
+        elif current_dir == LEFT:
+            if arr[y, x-1] == '#':
+                current_dir = UP
+            else:
+                x -= 1
+
+        combo = ((y, x), current_dir)
+        if combo in walked:
+            return walked, True
+        else:
+            walked.add(combo)
+    return walked, False
+
+
+def d6p1(data):
+    """
+    move 1 by 1
+    """
+    arr = data['arr']
+    start_pos = data['startpos']
+    start_dir = UP
+
+    path, looped = walk(arr, start_pos, start_dir)
+
+
+    result = set()
+    for elem in path:
+        result.add(elem[0])
+    return len(result)
 
 
 def d6p2(data):
     """
     part 2
+    still broken
     """
-    pass
+    arr = data['arr']
+    start_pos = data['startpos']
+    start_dir = UP
+    result = 0
+    path, _ = walk(arr, start_pos, start_dir)
+
+    for point in path:
+        arr[point[0], point[1]] = '#'
+        _, loop = walk(arr, start_pos, start_dir)
+        arr[point[0], point[1]] = '.'
+        if loop:
+            result += 1
+    return result
 
 
 if __name__ == '__main__':
-    data = open('../data/day06.txt', 'r').read().splitlines()
-    data = d6parse(data)
-    r1 = d6p1(data)
-    r2 = d6p2(data)
-
-    print(r1, r2)
+    # borrowed from https://www.reddit.com/r/adventofcode/comments/1h7tovg/comment/m0o5xe4/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
+    # will check why my code don't work later
+    G = {i + j * 1j: c for i, r in enumerate(open('../data/day06.txt'))
+         for j, c in enumerate(r.strip())}
+    start = min(p for p in G if G[p] == '^')
+    def walk(G):
+        pos, dir, seen = start, -1, set()
+        while pos in G and (pos, dir) not in seen:
+            seen |= {(pos, dir)}
+            if G.get(pos + dir) == "#":
+                dir *= -1j
+            else:
+                pos += dir
+        return {p for p, _ in seen}, (pos, dir) in seen
+    path = walk(G)[0]
+    print(len(path),
+          sum(walk(G | {o: '#'})[1] for o in path))
